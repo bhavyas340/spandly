@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown, X, Plus, ArrowLeft, Mic } from "lucide-react";
+import { ChevronDown, X, Plus, ArrowLeft, Camera, Target } from "lucide-react";
+import { useLocalState, fileToDataUrl } from "@/lib/storage";
 
 export const Route = createFileRoute("/app")({
   component: AppShell,
@@ -12,32 +13,65 @@ export const Route = createFileRoute("/app")({
   }),
 });
 
-type Expense = { id: number; label: string; amount: number; emoji: string; gradient: string; sub: string };
+type Expense = {
+  id: number;
+  label: string;
+  amount: number;
+  emoji: string;
+  gradient: string;
+  sub: string;
+  image?: string;
+  createdAt: number;
+};
 
-const initialExpenses: Expense[] = [
-  { id: 1, label: "Food",     amount: 460, emoji: "🍱", gradient: "linear-gradient(160deg,#C8F08A 0%,#7BD3D1 60%,#FFD27A 100%)", sub: "Today" },
-  { id: 2, label: "Travel",   amount: 185, emoji: "🛺", gradient: "linear-gradient(160deg,#E8C5FF 0%,#F4A6C5 100%)",            sub: "Quality" },
-  { id: 3, label: "Bills",    amount: 299, emoji: "📱", gradient: "linear-gradient(160deg,#F5C7B0 0%,#C8839A 100%)",            sub: "Norma" },
-  { id: 4, label: "Shopping", amount: 320, emoji: "🛍️", gradient: "linear-gradient(160deg,#FFB36B 0%,#FF7A3D 100%)",           sub: "Nice" },
+const PALETTES = [
+  "linear-gradient(160deg,#C8F08A 0%,#7BD3D1 60%,#FFD27A 100%)",
+  "linear-gradient(160deg,#E8C5FF 0%,#F4A6C5 100%)",
+  "linear-gradient(160deg,#F5C7B0 0%,#C8839A 100%)",
+  "linear-gradient(160deg,#FFB36B 0%,#FF7A3D 100%)",
+  "linear-gradient(160deg,#B8E0FF 0%,#9B8BFF 100%)",
+  "linear-gradient(160deg,#FFE08A 0%,#FF9B6B 100%)",
 ];
 
+const seed: Expense[] = [
+  { id: 1, label: "Food",     amount: 460, emoji: "🍱", gradient: PALETTES[0], sub: "Today",   createdAt: Date.now() },
+  { id: 2, label: "Travel",   amount: 185, emoji: "🛺", gradient: PALETTES[1], sub: "Today",   createdAt: Date.now() },
+  { id: 3, label: "Bills",    amount: 299, emoji: "📱", gradient: PALETTES[2], sub: "Today",   createdAt: Date.now() },
+  { id: 4, label: "Shopping", amount: 320, emoji: "🛍️", gradient: PALETTES[3], sub: "Today",   createdAt: Date.now() },
+];
+
+function isSameDay(a: number, b: number) {
+  const da = new Date(a), db = new Date(b);
+  return da.getFullYear() === db.getFullYear() && da.getMonth() === db.getMonth() && da.getDate() === db.getDate();
+}
+
 function AppShell() {
-  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
+  const [expenses, setExpenses] = useLocalState<Expense[]>("kharcha.expenses", seed);
   const [voiceOpen, setVoiceOpen] = useState(false);
 
   const addExpense = (label: string, amount: number) => {
-    const palettes = [
-      "linear-gradient(160deg,#C8F08A 0%,#7BD3D1 60%,#FFD27A 100%)",
-      "linear-gradient(160deg,#E8C5FF 0%,#F4A6C5 100%)",
-      "linear-gradient(160deg,#F5C7B0 0%,#C8839A 100%)",
-      "linear-gradient(160deg,#FFB36B 0%,#FF7A3D 100%)",
-      "linear-gradient(160deg,#B8E0FF 0%,#9B8BFF 100%)",
-    ];
     setExpenses((prev) => [
-      { id: Date.now(), label, amount, emoji: "💸", gradient: palettes[prev.length % palettes.length], sub: "Just now" },
+      {
+        id: Date.now(),
+        label,
+        amount,
+        emoji: "💸",
+        gradient: PALETTES[prev.length % PALETTES.length],
+        sub: "Just now",
+        createdAt: Date.now(),
+      },
       ...prev,
     ]);
   };
+
+  const setImageOn = (id: number, image: string) => {
+    setExpenses((prev) => prev.map((e) => (e.id === id ? { ...e, image } : e)));
+  };
+
+  const today = new Date();
+  const dayName = today.toLocaleDateString("en-IN", { weekday: "long" });
+  const dateStr = today.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+  const todayTotal = expenses.filter((e) => isSameDay(e.createdAt, today.getTime())).reduce((s, e) => s + e.amount, 0);
 
   return (
     <div className="min-h-screen flex justify-center" style={{ background: "#ECECEC" }}>
@@ -54,15 +88,42 @@ function AppShell() {
         {/* Header */}
         <div className="px-6 pt-2 pb-4 flex items-center justify-between">
           <h1 className="text-[34px] leading-none font-bold tracking-tight text-black">Kharcha</h1>
-          <button className="w-9 h-9 rounded-full bg-white/60 backdrop-blur flex items-center justify-center text-black/60 shadow-sm">
-            <ChevronDown size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/goals"
+              className="h-9 px-3 rounded-full bg-white/70 backdrop-blur flex items-center gap-1.5 text-black/70 shadow-sm text-[12px] font-semibold"
+            >
+              <Target size={14} /> Goals
+            </Link>
+            <button className="w-9 h-9 rounded-full bg-white/60 backdrop-blur flex items-center justify-center text-black/60 shadow-sm">
+              <ChevronDown size={18} />
+            </button>
+          </div>
+        </div>
+
+        {/* Date + Today Total card */}
+        <div className="px-5 pb-4">
+          <div className="rounded-[22px] bg-white/85 backdrop-blur-xl shadow-[0_8px_24px_-14px_rgba(0,0,0,0.25)] border border-black/5 px-4 py-3 flex items-center justify-between">
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">{dayName}</div>
+              <div className="text-[18px] font-bold text-black leading-tight">{dateStr}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">Today</div>
+              <div
+                className="text-[22px] font-bold text-black leading-tight"
+                style={{ fontFamily: "'Courier New', monospace", letterSpacing: "-0.02em" }}
+              >
+                ₹{todayTotal}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Card grid */}
         <div className="px-5 grid grid-cols-2 gap-3 pb-6">
           {expenses.slice(0, 6).map((e) => (
-            <ExpenseCard key={e.id} e={e} />
+            <ExpenseCard key={e.id} e={e} onImage={(img) => setImageOn(e.id, img)} />
           ))}
         </div>
 
@@ -91,16 +152,46 @@ function AppShell() {
   );
 }
 
-function ExpenseCard({ e }: { e: Expense }) {
+function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const handlePick = async (file?: File) => {
+    if (!file) return;
+    const url = await fileToDataUrl(file);
+    onImage(url);
+  };
+
   return (
     <div
       className="relative rounded-[28px] p-4 aspect-[0.95] overflow-hidden shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25)]"
       style={{ background: e.gradient }}
     >
       <div className="flex flex-col h-full justify-between">
-        <div>
-          <div className="text-[15px] font-bold text-black/90 leading-tight">{e.label}</div>
-          <div className="text-[12px] text-black/50 -mt-0.5">{e.sub}</div>
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="text-[15px] font-bold text-black/90 leading-tight">{e.label}</div>
+            <div className="text-[12px] text-black/50 -mt-0.5">{e.sub}</div>
+          </div>
+
+          {/* 2x2 sub-card — inherits parent radius, allows image upload */}
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="w-11 h-11 rounded-[inherit] bg-white/55 backdrop-blur-sm border border-white/60 flex items-center justify-center overflow-hidden shrink-0 shadow-sm hover:bg-white/70 transition"
+            style={{ borderRadius: "14px" }}
+            aria-label="Add photo"
+          >
+            {e.image ? (
+              <img src={e.image} alt={e.label} className="w-full h-full object-cover" />
+            ) : (
+              <Camera size={16} className="text-black/55" />
+            )}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(ev) => handlePick(ev.target.files?.[0])}
+            />
+          </button>
         </div>
 
         {/* Dot-matrix style amount */}
@@ -108,10 +199,9 @@ function ExpenseCard({ e }: { e: Expense }) {
           <div
             className="font-bold text-black/85 leading-none"
             style={{
-              fontSize: 44,
+              fontSize: 40,
               fontFamily: "'Courier New', monospace",
               letterSpacing: "-0.02em",
-              textShadow: "0 0 0 currentColor",
             }}
           >
             ₹{e.amount}
@@ -119,7 +209,7 @@ function ExpenseCard({ e }: { e: Expense }) {
         </div>
 
         <div className="text-[11px] font-semibold text-black/55 uppercase tracking-wider">
-          {e.label === "Food" ? "Sun" : e.label === "Travel" ? "Vitamin D" : e.label === "Bills" ? "Pay" : "₹/day"}
+          {new Date(e.createdAt).toLocaleDateString("en-IN", { weekday: "short", day: "2-digit" })}
         </div>
       </div>
     </div>
@@ -153,8 +243,7 @@ function BottomDock({ onVoice }: { onVoice: () => void }) {
   );
 }
 
-/** Apple-intelligence-style 4 black pill bars that breathe independently. */
-function WaveformIcon({ active = false }: { active?: boolean }) {
+function WaveformIcon() {
   return (
     <div className="flex items-center gap-1.5 h-7">
       {[0, 1, 2, 3].map((i) => (
@@ -166,7 +255,6 @@ function WaveformIcon({ active = false }: { active?: boolean }) {
             height: 18,
             transformOrigin: "center",
             animation: `wave-bar 1.${4 + i}s ease-in-out ${i * 0.12}s infinite`,
-            animationPlayState: active ? "running" : "running",
           }}
         />
       ))}
@@ -174,7 +262,6 @@ function WaveformIcon({ active = false }: { active?: boolean }) {
   );
 }
 
-/** Voice modal: full-screen aurora gradient + live transcript + animated bars. */
 function VoiceModal({
   onClose,
   onResult,
@@ -189,7 +276,8 @@ function VoiceModal({
 
   useEffect(() => {
     const SR =
-      (typeof window !== "undefined" && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition));
+      (typeof window !== "undefined" &&
+        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition));
     if (!SR) {
       setErr("Voice not supported in this browser. Try Chrome.");
       return;
@@ -231,10 +319,8 @@ function VoiceModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Frosted overlay */}
         <div className="absolute inset-0 backdrop-blur-3xl" style={{ background: "rgba(255,255,255,0.04)" }} />
 
-        {/* Status bar */}
         <div className="relative flex items-center justify-between px-7 pt-4 pb-2 text-[13px] font-semibold text-white">
           <span>9:41</span>
           <button onClick={onClose} className="text-white/70 hover:text-white">
@@ -242,14 +328,12 @@ function VoiceModal({
           </button>
         </div>
 
-        {/* Headline */}
         <div className="relative px-8 pt-12">
-          <div className="text-white text-[28px] font-bold leading-tight tracking-tight drop-shadow-lg min-h-[120px]">
+          <div className="text-white text-[28px] font-bold leading-tight tracking-tight drop-shadow-lg min-h-[120px] whitespace-pre-line">
             {transcript || "Say something like\n“chai 20” or\n“auto 85 rupees”"}
           </div>
         </div>
 
-        {/* Bottom blob + bars */}
         <div className="absolute bottom-0 left-0 right-0 pb-12 flex flex-col items-center gap-8">
           <div
             className="w-56 h-20 rounded-full"
@@ -297,7 +381,6 @@ function VoiceModal({
   );
 }
 
-/** Parse "chai 20", "20 chai", "auto 85 rupees", "spent 140 on lunch" */
 function parseExpense(text: string): { label: string; amount: number } | null {
   if (!text) return null;
   const numMatch = text.match(/(\d+(?:\.\d+)?)/);
