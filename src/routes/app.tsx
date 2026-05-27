@@ -34,10 +34,10 @@ const PALETTES = [
 ];
 
 const seed: Expense[] = [
-  { id: 1, label: "Food",     amount: 460, emoji: "🍱", gradient: PALETTES[0], sub: "Today",   createdAt: Date.now() },
-  { id: 2, label: "Travel",   amount: 185, emoji: "🛺", gradient: PALETTES[1], sub: "Today",   createdAt: Date.now() },
-  { id: 3, label: "Bills",    amount: 299, emoji: "📱", gradient: PALETTES[2], sub: "Today",   createdAt: Date.now() },
-  { id: 4, label: "Shopping", amount: 320, emoji: "🛍️", gradient: PALETTES[3], sub: "Today",   createdAt: Date.now() },
+  { id: 1, label: "Food",     amount: 460, emoji: "🍱", gradient: PALETTES[0], sub: "Today", createdAt: Date.now() },
+  { id: 2, label: "Travel",   amount: 185, emoji: "🛺", gradient: PALETTES[1], sub: "Today", createdAt: Date.now() },
+  { id: 3, label: "Bills",    amount: 299, emoji: "📱", gradient: PALETTES[2], sub: "Today", createdAt: Date.now() },
+  { id: 4, label: "Shopping", amount: 320, emoji: "🛍️", gradient: PALETTES[3], sub: "Today", createdAt: Date.now() },
 ];
 
 function isSameDay(a: number, b: number) {
@@ -48,6 +48,7 @@ function isSameDay(a: number, b: number) {
 function AppShell() {
   const [expenses, setExpenses] = useLocalState<Expense[]>("kharcha.expenses", seed);
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
 
   const addExpense = (label: string, amount: number) => {
     setExpenses((prev) => [
@@ -64,6 +65,10 @@ function AppShell() {
     ]);
   };
 
+  const clearAll = () => {
+    if (confirm("Clear all expenses?")) setExpenses([]);
+  };
+
   const setImageOn = (id: number, image: string) => {
     setExpenses((prev) => prev.map((e) => (e.id === id ? { ...e, image } : e)));
   };
@@ -75,7 +80,7 @@ function AppShell() {
 
   return (
     <div className="min-h-screen flex justify-center" style={{ background: "#ECECEC" }}>
-      <div className="w-full max-w-[440px] min-h-screen relative flex flex-col" style={{ background: "#ECECEC" }}>
+      <div className="w-full max-w-[440px] relative flex flex-col" style={{ background: "#ECECEC" }}>
         {/* Phone status bar mimic */}
         <div className="flex items-center justify-between px-7 pt-4 pb-2 text-[13px] font-semibold text-black/90">
           <span>9:41</span>
@@ -120,23 +125,28 @@ function AppShell() {
           </div>
         </div>
 
-        {/* Card grid */}
-        <div className="px-5 grid grid-cols-2 gap-3 pb-6">
-          {expenses.slice(0, 6).map((e) => (
+        {/* Card grid — scrollable, padding bottom for dock */}
+        <div className="px-5 grid grid-cols-2 gap-3 pb-40">
+          {expenses.length === 0 && (
+            <div className="col-span-2 rounded-[22px] bg-white/85 p-6 text-center border border-black/5 text-black/50 text-sm">
+              No expenses yet. Tap <Plus className="inline" size={14} /> to add one.
+            </div>
+          )}
+          {expenses.map((e) => (
             <ExpenseCard key={e.id} e={e} onImage={(img) => setImageOn(e.id, img)} />
           ))}
         </div>
+      </div>
 
-        {/* Page dots */}
-        <div className="flex items-center justify-center gap-1.5 pb-6">
-          <span className="w-6 h-1.5 rounded-full bg-black/80" />
-          <span className="w-1.5 h-1.5 rounded-full bg-black/25" />
+      {/* Bottom dock — fixed within phone column */}
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[440px] px-5 pb-6 pt-4 z-40 pointer-events-none">
+        <div className="pointer-events-auto">
+          <BottomDock
+            onVoice={() => setVoiceOpen(true)}
+            onAdd={() => setManualOpen(true)}
+            onClear={clearAll}
+          />
         </div>
-
-        <div className="flex-1" />
-
-        {/* Bottom dock */}
-        <BottomDock onVoice={() => setVoiceOpen(true)} />
       </div>
 
       {voiceOpen && (
@@ -145,6 +155,16 @@ function AppShell() {
           onResult={(label, amount) => {
             addExpense(label, amount);
             setVoiceOpen(false);
+          }}
+        />
+      )}
+
+      {manualOpen && (
+        <ManualModal
+          onClose={() => setManualOpen(false)}
+          onSubmit={(label, amount) => {
+            addExpense(label, amount);
+            setManualOpen(false);
           }}
         />
       )}
@@ -172,11 +192,9 @@ function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => voi
             <div className="text-[12px] text-black/50 -mt-0.5">{e.sub}</div>
           </div>
 
-          {/* 2x2 sub-card — inherits parent radius, allows image upload */}
           <button
             onClick={() => fileRef.current?.click()}
-            className="w-11 h-11 rounded-[inherit] bg-white/55 backdrop-blur-sm border border-white/60 flex items-center justify-center overflow-hidden shrink-0 shadow-sm hover:bg-white/70 transition"
-            style={{ borderRadius: "14px" }}
+            className="w-11 h-11 rounded-[14px] bg-white/55 backdrop-blur-sm border border-white/60 flex items-center justify-center overflow-hidden shrink-0 shadow-sm hover:bg-white/70 transition"
             aria-label="Add photo"
           >
             {e.image ? (
@@ -194,15 +212,10 @@ function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => voi
           </button>
         </div>
 
-        {/* Dot-matrix style amount */}
         <div className="flex-1 flex items-center justify-center">
           <div
             className="font-bold text-black/85 leading-none"
-            style={{
-              fontSize: 40,
-              fontFamily: "'Courier New', monospace",
-              letterSpacing: "-0.02em",
-            }}
+            style={{ fontSize: 40, fontFamily: "'Courier New', monospace", letterSpacing: "-0.02em" }}
           >
             ₹{e.amount}
           </div>
@@ -216,11 +229,15 @@ function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => voi
   );
 }
 
-function BottomDock({ onVoice }: { onVoice: () => void }) {
+function BottomDock({ onVoice, onAdd, onClear }: { onVoice: () => void; onAdd: () => void; onClear: () => void }) {
   return (
-    <div className="sticky bottom-0 px-5 pb-6 pt-4">
-      <div className="flex items-center justify-between gap-3 px-5 py-3 rounded-full bg-white/85 backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] border border-black/5">
-        <button className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-black/70 shadow-sm hover:bg-black/5 transition">
+    <>
+      <div className="flex items-center justify-between gap-3 px-5 py-3 rounded-full bg-white/90 backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] border border-black/5">
+        <button
+          onClick={onClear}
+          className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-black/70 shadow-sm hover:bg-black/5 transition"
+          aria-label="Clear all"
+        >
           <X size={20} />
         </button>
 
@@ -232,14 +249,18 @@ function BottomDock({ onVoice }: { onVoice: () => void }) {
           <WaveformIcon />
         </button>
 
-        <button className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-black/70 shadow-sm hover:bg-black/5 transition">
+        <button
+          onClick={onAdd}
+          className="w-11 h-11 rounded-full bg-black flex items-center justify-center text-white shadow-sm hover:bg-black/80 transition"
+          aria-label="Add expense"
+        >
           <Plus size={20} />
         </button>
       </div>
       <div className="text-center mt-3 text-[11px] font-semibold text-black/40 uppercase tracking-wider">
         Voice & Text Input
       </div>
-    </div>
+    </>
   );
 }
 
@@ -258,6 +279,77 @@ function WaveformIcon() {
           }}
         />
       ))}
+    </div>
+  );
+}
+
+function ManualModal({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void;
+  onSubmit: (label: string, amount: number) => void;
+}) {
+  const [label, setLabel] = useState("");
+  const [amount, setAmount] = useState("");
+
+  const canSave = label.trim().length > 0 && Number(amount) > 0;
+  const submit = () => {
+    if (!canSave) return;
+    onSubmit(label.trim().replace(/\b\w/g, (c) => c.toUpperCase()), Number(amount));
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex justify-center items-end sm:items-center bg-black/40 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-[440px] rounded-t-[28px] sm:rounded-[28px] sm:mb-6 p-5 pb-8"
+        style={{ background: "#ECECEC" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-[18px] font-bold text-black">Add expense</div>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/60 shadow-sm"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="rounded-[22px] bg-white/90 border border-black/5 shadow-sm px-4 py-3 mb-3">
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40 mb-1">What</div>
+          <input
+            autoFocus
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            placeholder="e.g. Chai, Auto, Lunch"
+            className="w-full bg-transparent outline-none text-[18px] font-bold text-black placeholder:text-black/30"
+          />
+        </div>
+
+        <div className="rounded-[22px] bg-white/90 border border-black/5 shadow-sm px-4 py-3 mb-5">
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40 mb-1">Amount ₹</div>
+          <input
+            inputMode="numeric"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ""))}
+            placeholder="0"
+            className="w-full bg-transparent outline-none text-[26px] font-bold text-black placeholder:text-black/30"
+            style={{ fontFamily: "'Courier New', monospace" }}
+          />
+        </div>
+
+        <button
+          onClick={submit}
+          disabled={!canSave}
+          className="w-full h-12 rounded-full bg-black text-white font-bold text-[15px] disabled:opacity-30 shadow-md"
+        >
+          Add expense
+        </button>
+      </div>
     </div>
   );
 }
