@@ -36,7 +36,7 @@ function Landing() {
       <header className="sticky top-0 z-40 backdrop-blur-xl" style={{ background: "rgba(236,236,236,0.75)" }}>
         <div className="max-w-[1100px] mx-auto px-5 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center text-sm font-bold">K</span>
+            <span className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center text-sm font-bold">S</span>
             <span className="font-bold text-lg tracking-tight">Spendly</span>
           </div>
           <nav className="hidden md:flex items-center gap-7 text-sm text-black/60">
@@ -214,7 +214,7 @@ function Landing() {
 
       <footer className="max-w-[1100px] mx-auto px-5 py-10 flex flex-wrap justify-between gap-4 text-sm text-black/50">
         <div className="flex items-center gap-2">
-          <span className="w-6 h-6 rounded-md bg-black text-white flex items-center justify-center text-[10px] font-bold">K</span>
+          <span className="w-6 h-6 rounded-md bg-black text-white flex items-center justify-center text-[10px] font-bold">S</span>
           <span className="font-bold text-black">Spendly</span>
           <span className="opacity-50">· Built for India</span>
         </div>
