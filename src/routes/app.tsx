@@ -1,13 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useRef, useEffect } from "react";
-import { ChevronDown, X, Plus, ArrowLeft, Camera, Target } from "lucide-react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import {
+  ChevronDown,
+  X,
+  Plus,
+  ArrowLeft,
+  Camera,
+  Target,
+  Calendar as CalendarIcon,
+  ScanLine,
+  TrendingUp,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useLocalState, fileToDataUrl } from "@/lib/storage";
 
 export const Route = createFileRoute("/app")({
   component: AppShell,
   head: () => ({
     meta: [
-      { title: "Kharcha — App" },
+      { title: "Spendly — App" },
       { name: "description", content: "Speak it. Log it. Done." },
     ],
   }),
@@ -49,8 +61,13 @@ function AppShell() {
   const [expenses, setExpenses] = useLocalState<Expense[]>("kharcha.expenses", seed);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [manualOpen, setManualOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<number>(Date.now());
+  const [prefillImage, setPrefillImage] = useState<string | undefined>(undefined);
+  const scanRef = useRef<HTMLInputElement>(null);
 
-  const addExpense = (label: string, amount: number) => {
+  const addExpense = (label: string, amount: number, image?: string) => {
     setExpenses((prev) => [
       {
         id: Date.now(),
@@ -59,6 +76,7 @@ function AppShell() {
         emoji: "💸",
         gradient: PALETTES[prev.length % PALETTES.length],
         sub: "Just now",
+        image,
         createdAt: Date.now(),
       },
       ...prev,
@@ -73,17 +91,30 @@ function AppShell() {
     setExpenses((prev) => prev.map((e) => (e.id === id ? { ...e, image } : e)));
   };
 
-  const today = new Date();
-  const dayName = today.toLocaleDateString("en-IN", { weekday: "long" });
-  const dateStr = today.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
-  const todayTotal = expenses.filter((e) => isSameDay(e.createdAt, today.getTime())).reduce((s, e) => s + e.amount, 0);
+  const selDate = new Date(selectedDate);
+  const dayName = selDate.toLocaleDateString("en-IN", { weekday: "long" });
+  const dateStr = selDate.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+  const isToday = isSameDay(selectedDate, Date.now());
+
+  const visible = useMemo(
+    () => expenses.filter((e) => isSameDay(e.createdAt, selectedDate)),
+    [expenses, selectedDate]
+  );
+  const dayTotal = visible.reduce((s, e) => s + e.amount, 0);
+
+  const handleScan = async (file?: File) => {
+    if (!file) return;
+    const url = await fileToDataUrl(file);
+    setPrefillImage(url);
+    setManualOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex justify-center" style={{ background: "#ECECEC" }}>
       <div className="w-full max-w-[440px] relative flex flex-col" style={{ background: "#ECECEC" }}>
-        {/* Phone status bar mimic */}
+        {/* Phone status bar */}
         <div className="flex items-center justify-between px-7 pt-4 pb-2 text-[13px] font-semibold text-black/90">
-          <span>9:41</span>
+          <LiveClock />
           <Link to="/" className="text-black/40 hover:text-black/70 transition">
             <ArrowLeft size={16} />
           </Link>
@@ -92,62 +123,105 @@ function AppShell() {
 
         {/* Header */}
         <div className="px-6 pt-2 pb-4 flex items-center justify-between">
-          <h1 className="text-[34px] leading-none font-bold tracking-tight text-black">Kharcha</h1>
-          <div className="flex items-center gap-2">
+          <h1 className="text-[34px] leading-none font-bold tracking-tight text-black">Spendly</h1>
+          <div className="flex items-center gap-2 relative">
             <Link
               to="/goals"
               className="h-9 px-3 rounded-full bg-white/70 backdrop-blur flex items-center gap-1.5 text-black/70 shadow-sm text-[12px] font-semibold"
             >
               <Target size={14} /> Goals
             </Link>
-            <button className="w-9 h-9 rounded-full bg-white/60 backdrop-blur flex items-center justify-center text-black/60 shadow-sm">
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              className="w-9 h-9 rounded-full bg-white/60 backdrop-blur flex items-center justify-center text-black/60 shadow-sm"
+              aria-label="Menu"
+            >
               <ChevronDown size={18} />
             </button>
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
+                <div className="absolute right-0 top-11 z-40 w-44 rounded-2xl bg-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] border border-black/5 overflow-hidden">
+                  <Link
+                    to="/analysis"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"
+                  >
+                    <TrendingUp size={15} /> Analysis
+                  </Link>
+                  <button
+                    onClick={() => { setMenuOpen(false); clearAll(); }}
+                    className="w-full text-left flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black/70 hover:bg-black/5 border-t border-black/5"
+                  >
+                    <X size={15} /> Clear all
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Date + Today Total card */}
+        {/* Date + Today Total card — click to open calendar */}
         <div className="px-5 pb-4">
-          <div className="rounded-[22px] bg-white/85 backdrop-blur-xl shadow-[0_8px_24px_-14px_rgba(0,0,0,0.25)] border border-black/5 px-4 py-3 flex items-center justify-between">
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">{dayName}</div>
-              <div className="text-[18px] font-bold text-black leading-tight">{dateStr}</div>
+          <button
+            onClick={() => setCalendarOpen(true)}
+            className="w-full rounded-[22px] bg-white/85 backdrop-blur-xl shadow-[0_8px_24px_-14px_rgba(0,0,0,0.25)] border border-black/5 px-4 py-3 flex items-center justify-between text-left hover:bg-white transition"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-[14px] bg-black text-white flex items-center justify-center shrink-0 shadow-sm">
+                <CalendarIcon size={18} />
+              </div>
+              <div>
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">{dayName}</div>
+                <div className="text-[18px] font-bold text-black leading-tight">{dateStr}</div>
+              </div>
             </div>
             <div className="text-right">
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">Today</div>
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">
+                {isToday ? "Today" : "Spent"}
+              </div>
               <div
                 className="text-[22px] font-bold text-black leading-tight"
                 style={{ fontFamily: "'Courier New', monospace", letterSpacing: "-0.02em" }}
               >
-                ₹{todayTotal}
+                ₹{dayTotal}
               </div>
             </div>
-          </div>
+          </button>
         </div>
 
-        {/* Card grid — scrollable, padding bottom for dock */}
+        {/* Card grid */}
         <div className="px-5 grid grid-cols-2 gap-3 pb-40">
-          {expenses.length === 0 && (
+          {visible.length === 0 && (
             <div className="col-span-2 rounded-[22px] bg-white/85 p-6 text-center border border-black/5 text-black/50 text-sm">
-              No expenses yet. Tap <Plus className="inline" size={14} /> to add one.
+              No expenses on this day. Tap <Plus className="inline" size={14} /> to add.
             </div>
           )}
-          {expenses.map((e) => (
+          {visible.map((e) => (
             <ExpenseCard key={e.id} e={e} onImage={(img) => setImageOn(e.id, img)} />
           ))}
         </div>
       </div>
 
-      {/* Bottom dock — fixed within phone column */}
+      {/* Bottom dock */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[440px] px-5 pb-6 pt-4 z-40 pointer-events-none">
         <div className="pointer-events-auto">
           <BottomDock
             onVoice={() => setVoiceOpen(true)}
-            onAdd={() => setManualOpen(true)}
-            onClear={clearAll}
+            onAdd={() => { setPrefillImage(undefined); setManualOpen(true); }}
+            onScan={() => scanRef.current?.click()}
           />
         </div>
       </div>
+
+      <input
+        ref={scanRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => { handleScan(e.target.files?.[0]); e.target.value = ""; }}
+      />
 
       {voiceOpen && (
         <VoiceModal
@@ -161,15 +235,37 @@ function AppShell() {
 
       {manualOpen && (
         <ManualModal
-          onClose={() => setManualOpen(false)}
-          onSubmit={(label, amount) => {
-            addExpense(label, amount);
+          prefillImage={prefillImage}
+          onClose={() => { setManualOpen(false); setPrefillImage(undefined); }}
+          onSubmit={(label, amount, image) => {
+            addExpense(label, amount, image);
             setManualOpen(false);
+            setPrefillImage(undefined);
           }}
+        />
+      )}
+
+      {calendarOpen && (
+        <CalendarModal
+          selected={selectedDate}
+          expenses={expenses}
+          onPick={(ts) => { setSelectedDate(ts); setCalendarOpen(false); }}
+          onClose={() => setCalendarOpen(false)}
         />
       )}
     </div>
   );
+}
+
+function LiveClock() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    tick();
+    const id = setInterval(tick, 1000 * 20);
+    return () => clearInterval(id);
+  }, []);
+  return <span>{now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>;
 }
 
 function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => void }) {
@@ -229,16 +325,16 @@ function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => voi
   );
 }
 
-function BottomDock({ onVoice, onAdd, onClear }: { onVoice: () => void; onAdd: () => void; onClear: () => void }) {
+function BottomDock({ onVoice, onAdd, onScan }: { onVoice: () => void; onAdd: () => void; onScan: () => void }) {
   return (
     <>
       <div className="flex items-center justify-between gap-3 px-5 py-3 rounded-full bg-white/90 backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] border border-black/5">
         <button
-          onClick={onClear}
+          onClick={onScan}
           className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-black/70 shadow-sm hover:bg-black/5 transition"
-          aria-label="Clear all"
+          aria-label="Scan receipt"
         >
-          <X size={20} />
+          <ScanLine size={20} />
         </button>
 
         <button
@@ -258,7 +354,7 @@ function BottomDock({ onVoice, onAdd, onClear }: { onVoice: () => void; onAdd: (
         </button>
       </div>
       <div className="text-center mt-3 text-[11px] font-semibold text-black/40 uppercase tracking-wider">
-        Voice & Text Input
+        Scan · Voice · Text
       </div>
     </>
   );
@@ -286,17 +382,20 @@ function WaveformIcon() {
 function ManualModal({
   onClose,
   onSubmit,
+  prefillImage,
 }: {
   onClose: () => void;
-  onSubmit: (label: string, amount: number) => void;
+  onSubmit: (label: string, amount: number, image?: string) => void;
+  prefillImage?: string;
 }) {
   const [label, setLabel] = useState("");
   const [amount, setAmount] = useState("");
+  const [image, setImage] = useState<string | undefined>(prefillImage);
 
   const canSave = label.trim().length > 0 && Number(amount) > 0;
   const submit = () => {
     if (!canSave) return;
-    onSubmit(label.trim().replace(/\b\w/g, (c) => c.toUpperCase()), Number(amount));
+    onSubmit(label.trim().replace(/\b\w/g, (c) => c.toUpperCase()), Number(amount), image);
   };
 
   return (
@@ -310,7 +409,9 @@ function ManualModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <div className="text-[18px] font-bold text-black">Add expense</div>
+          <div className="text-[18px] font-bold text-black">
+            {prefillImage ? "Scan receipt" : "Add expense"}
+          </div>
           <button
             onClick={onClose}
             className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/60 shadow-sm"
@@ -318,6 +419,12 @@ function ManualModal({
             <X size={16} />
           </button>
         </div>
+
+        {image && (
+          <div className="rounded-[22px] overflow-hidden mb-3 bg-white/90 border border-black/5 shadow-sm aspect-[16/9]">
+            <img src={image} alt="receipt" className="w-full h-full object-cover" />
+          </div>
+        )}
 
         <div className="rounded-[22px] bg-white/90 border border-black/5 shadow-sm px-4 py-3 mb-3">
           <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40 mb-1">What</div>
@@ -349,6 +456,127 @@ function ManualModal({
         >
           Add expense
         </button>
+      </div>
+    </div>
+  );
+}
+
+function CalendarModal({
+  selected,
+  expenses,
+  onPick,
+  onClose,
+}: {
+  selected: number;
+  expenses: Expense[];
+  onPick: (ts: number) => void;
+  onClose: () => void;
+}) {
+  const [view, setView] = useState(() => {
+    const d = new Date(selected);
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  });
+
+  const year = view.getFullYear();
+  const month = view.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+
+  // Map: day-of-month -> total
+  const dayTotals = useMemo(() => {
+    const m = new Map<number, number>();
+    expenses.forEach((e) => {
+      const d = new Date(e.createdAt);
+      if (d.getFullYear() === year && d.getMonth() === month) {
+        m.set(d.getDate(), (m.get(d.getDate()) || 0) + e.amount);
+      }
+    });
+    return m;
+  }, [expenses, year, month]);
+
+  const cells: (number | null)[] = [];
+  for (let i = 0; i < firstDay; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+
+  const prevMonth = () => setView(new Date(year, month - 1, 1));
+  const nextMonth = () => setView(new Date(year, month + 1, 1));
+
+  const sel = new Date(selected);
+  const isSelectedCell = (d: number) =>
+    sel.getFullYear() === year && sel.getMonth() === month && sel.getDate() === d;
+  const isTodayCell = (d: number) =>
+    today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+
+  return (
+    <div className="fixed inset-0 z-50 flex justify-center items-end sm:items-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className="w-full max-w-[440px] rounded-t-[28px] sm:rounded-[28px] sm:mb-6 p-5 pb-7"
+        style={{ background: "#ECECEC" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-[18px] font-bold text-black">Pick a day</div>
+          <button onClick={onClose} className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/60 shadow-sm">
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="rounded-[24px] bg-white/95 border border-black/5 shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <button onClick={prevMonth} className="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center text-black/70">
+              <ChevronLeft size={16} />
+            </button>
+            <div className="text-[15px] font-bold text-black">
+              {view.toLocaleDateString("en-IN", { month: "long", year: "numeric" })}
+            </div>
+            <button onClick={nextMonth} className="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center text-black/70">
+              <ChevronRight size={16} />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-7 gap-1 mb-1">
+            {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+              <div key={i} className="text-center text-[10px] font-bold uppercase text-black/40 py-1">{d}</div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-7 gap-1">
+            {cells.map((d, i) => {
+              if (d === null) return <div key={i} />;
+              const has = dayTotals.has(d);
+              const isSel = isSelectedCell(d);
+              const isTod = isTodayCell(d);
+              return (
+                <button
+                  key={i}
+                  onClick={() => {
+                    const picked = new Date(year, month, d, 12, 0, 0).getTime();
+                    onPick(picked);
+                  }}
+                  className={`aspect-square rounded-xl flex flex-col items-center justify-center text-[13px] font-bold relative transition ${
+                    isSel
+                      ? "bg-black text-white"
+                      : isTod
+                      ? "bg-black/10 text-black"
+                      : "text-black/80 hover:bg-black/5"
+                  }`}
+                >
+                  <span>{d}</span>
+                  {has && (
+                    <span
+                      className={`absolute bottom-1 w-1 h-1 rounded-full ${isSel ? "bg-white" : "bg-black"}`}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="text-center text-[11px] font-semibold uppercase tracking-wider text-black/40 mt-3">
+          Dot = has expenses
+        </div>
       </div>
     </div>
   );
@@ -414,7 +642,7 @@ function VoiceModal({
         <div className="absolute inset-0 backdrop-blur-3xl" style={{ background: "rgba(255,255,255,0.04)" }} />
 
         <div className="relative flex items-center justify-between px-7 pt-4 pb-2 text-[13px] font-semibold text-white">
-          <span>9:41</span>
+          <LiveClock />
           <button onClick={onClose} className="text-white/70 hover:text-white">
             <X size={18} />
           </button>
@@ -481,7 +709,7 @@ function parseExpense(text: string): { label: string; amount: number } | null {
   const cleaned = text
     .toLowerCase()
     .replace(/(\d+(?:\.\d+)?)/, " ")
-    .replace(/\b(rupees|rupee|rs|inr|on|for|spent|paid|add|log|expense|kharcha)\b/g, " ")
+    .replace(/\b(rupees|rupee|rs|inr|on|for|spent|paid|add|log|expense|kharcha|spendly)\b/g, " ")
     .replace(/[^\p{L}\s]/gu, " ")
     .trim()
     .replace(/\s+/g, " ");
