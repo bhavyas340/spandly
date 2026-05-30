@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SquadRouteImport } from './routes/squad'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SquadRoute = SquadRouteImport.update({
+  id: '/squad',
+  path: '/squad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoastRoute = RoastRouteImport.update({
   id: '/roast',
   path: '/roast',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
+  '/squad': typeof SquadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
+  '/squad': typeof SquadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,14 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
+  '/squad': typeof SquadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analysis' | '/app' | '/goals' | '/roast'
+  fullPaths: '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis' | '/app' | '/goals' | '/roast'
-  id: '__root__' | '/' | '/analysis' | '/app' | '/goals' | '/roast'
+  to: '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad'
+  id: '__root__' | '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,10 +86,18 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   GoalsRoute: typeof GoalsRoute
   RoastRoute: typeof RoastRoute
+  SquadRoute: typeof SquadRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/squad': {
+      id: '/squad'
+      path: '/squad'
+      fullPath: '/squad'
+      preLoaderRoute: typeof SquadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/roast': {
       id: '/roast'
       path: '/roast'
@@ -125,6 +142,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   GoalsRoute: GoalsRoute,
   RoastRoute: RoastRoute,
+  SquadRoute: SquadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
