@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WrappedRouteImport } from './routes/wrapped'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as GoalsRouteImport } from './routes/goals'
@@ -16,6 +17,11 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WrappedRoute = WrappedRouteImport.update({
+  id: '/wrapped',
+  path: '/wrapped',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SquadRoute = SquadRouteImport.update({
   id: '/squad',
   path: '/squad',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
   '/squad': typeof SquadRoute
+  '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
   '/squad': typeof SquadRoute
+  '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,13 +79,29 @@ export interface FileRoutesById {
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
   '/squad': typeof SquadRoute
+  '/wrapped': typeof WrappedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad'
+  fullPaths:
+    | '/'
+    | '/analysis'
+    | '/app'
+    | '/goals'
+    | '/roast'
+    | '/squad'
+    | '/wrapped'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad'
-  id: '__root__' | '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad'
+  to: '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad' | '/wrapped'
+  id:
+    | '__root__'
+    | '/'
+    | '/analysis'
+    | '/app'
+    | '/goals'
+    | '/roast'
+    | '/squad'
+    | '/wrapped'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,10 +111,18 @@ export interface RootRouteChildren {
   GoalsRoute: typeof GoalsRoute
   RoastRoute: typeof RoastRoute
   SquadRoute: typeof SquadRoute
+  WrappedRoute: typeof WrappedRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wrapped': {
+      id: '/wrapped'
+      path: '/wrapped'
+      fullPath: '/wrapped'
+      preLoaderRoute: typeof WrappedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/squad': {
       id: '/squad'
       path: '/squad'
@@ -143,6 +175,7 @@ const rootRouteChildren: RootRouteChildren = {
   GoalsRoute: GoalsRoute,
   RoastRoute: RoastRoute,
   SquadRoute: SquadRoute,
+  WrappedRoute: WrappedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
