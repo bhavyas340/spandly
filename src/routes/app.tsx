@@ -141,7 +141,7 @@ function AppShell() {
             {menuOpen && (
               <>
                 <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
-                <div className="absolute right-0 top-11 z-40 w-44 rounded-2xl bg-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] border border-black/5 overflow-hidden">
+                <div className="absolute right-0 top-11 z-40 w-48 rounded-2xl bg-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] border border-black/5 overflow-hidden">
                   <Link
                     to="/analysis"
                     onClick={() => setMenuOpen(false)}
@@ -149,9 +149,26 @@ function AppShell() {
                   >
                     <TrendingUp size={15} /> Analysis
                   </Link>
+                  <div className="h-px bg-black/5" />
+                  <Link to="/roast" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
+                    <span>🔥</span> Roast Me
+                  </Link>
+                  <Link to="/squad" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
+                    <span>⚔️</span> Squad Battle
+                  </Link>
+                  <Link to="/wrapped" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
+                    <span>📊</span> My Wrapped
+                  </Link>
+                  <Link to="/challenges" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
+                    <span>🎯</span> Challenges
+                  </Link>
+                  <Link to="/coach" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
+                    <span>🤖</span> Spandly Bhai
+                  </Link>
+                  <div className="h-px bg-black/5" />
                   <button
                     onClick={() => { setMenuOpen(false); clearAll(); }}
-                    className="w-full text-left flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black/70 hover:bg-black/5 border-t border-black/5"
+                    className="w-full text-left flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black/70 hover:bg-black/5"
                   >
                     <X size={15} /> Clear all
                   </button>
