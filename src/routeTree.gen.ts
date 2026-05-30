@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RoastRouteImport } from './routes/roast'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RoastRoute = RoastRouteImport.update({
+  id: '/roast',
+  path: '/roast',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GoalsRoute = GoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/goals': typeof GoalsRoute
+  '/roast': typeof RoastRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/goals': typeof GoalsRoute
+  '/roast': typeof RoastRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/goals': typeof GoalsRoute
+  '/roast': typeof RoastRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analysis' | '/app' | '/goals'
+  fullPaths: '/' | '/analysis' | '/app' | '/goals' | '/roast'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis' | '/app' | '/goals'
-  id: '__root__' | '/' | '/analysis' | '/app' | '/goals'
+  to: '/' | '/analysis' | '/app' | '/goals' | '/roast'
+  id: '__root__' | '/' | '/analysis' | '/app' | '/goals' | '/roast'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +76,18 @@ export interface RootRouteChildren {
   AnalysisRoute: typeof AnalysisRoute
   AppRoute: typeof AppRoute
   GoalsRoute: typeof GoalsRoute
+  RoastRoute: typeof RoastRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/roast': {
+      id: '/roast'
+      path: '/roast'
+      fullPath: '/roast'
+      preLoaderRoute: typeof RoastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/goals': {
       id: '/goals'
       path: '/goals'
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalysisRoute: AnalysisRoute,
   AppRoute: AppRoute,
   GoalsRoute: GoalsRoute,
+  RoastRoute: RoastRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
