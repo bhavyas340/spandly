@@ -13,6 +13,7 @@ import { Route as WrappedRouteImport } from './routes/wrapped'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as GoalsRouteImport } from './routes/goals'
+import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
@@ -37,6 +38,11 @@ const GoalsRoute = GoalsRouteImport.update({
   path: '/goals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChallengesRoute = ChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/challenges': typeof ChallengesRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
   '/squad': typeof SquadRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/challenges': typeof ChallengesRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
   '/squad': typeof SquadRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/challenges': typeof ChallengesRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
   '/squad': typeof SquadRoute
@@ -87,17 +96,27 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/app'
+    | '/challenges'
     | '/goals'
     | '/roast'
     | '/squad'
     | '/wrapped'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis' | '/app' | '/goals' | '/roast' | '/squad' | '/wrapped'
+  to:
+    | '/'
+    | '/analysis'
+    | '/app'
+    | '/challenges'
+    | '/goals'
+    | '/roast'
+    | '/squad'
+    | '/wrapped'
   id:
     | '__root__'
     | '/'
     | '/analysis'
     | '/app'
+    | '/challenges'
     | '/goals'
     | '/roast'
     | '/squad'
@@ -108,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
   AppRoute: typeof AppRoute
+  ChallengesRoute: typeof ChallengesRoute
   GoalsRoute: typeof GoalsRoute
   RoastRoute: typeof RoastRoute
   SquadRoute: typeof SquadRoute
@@ -144,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GoalsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/challenges': {
+      id: '/challenges'
+      path: '/challenges'
+      fullPath: '/challenges'
+      preLoaderRoute: typeof ChallengesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -172,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
   AppRoute: AppRoute,
+  ChallengesRoute: ChallengesRoute,
   GoalsRoute: GoalsRoute,
   RoastRoute: RoastRoute,
   SquadRoute: SquadRoute,
