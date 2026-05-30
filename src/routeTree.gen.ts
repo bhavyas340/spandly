@@ -9,14 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WrappedRouteImport } from './routes/wrapped'
+import { Route as SquadRouteImport } from './routes/squad'
+import { Route as RoastRouteImport } from './routes/roast'
 import { Route as GoalsRouteImport } from './routes/goals'
+import { Route as CoachRouteImport } from './routes/coach'
+import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WrappedRoute = WrappedRouteImport.update({
+  id: '/wrapped',
+  path: '/wrapped',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SquadRoute = SquadRouteImport.update({
+  id: '/squad',
+  path: '/squad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoastRoute = RoastRouteImport.update({
+  id: '/roast',
+  path: '/roast',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GoalsRoute = GoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachRoute = CoachRouteImport.update({
+  id: '/coach',
+  path: '/coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChallengesRoute = ChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -39,43 +69,126 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/challenges': typeof ChallengesRoute
+  '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/roast': typeof RoastRoute
+  '/squad': typeof SquadRoute
+  '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/challenges': typeof ChallengesRoute
+  '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/roast': typeof RoastRoute
+  '/squad': typeof SquadRoute
+  '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/challenges': typeof ChallengesRoute
+  '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/roast': typeof RoastRoute
+  '/squad': typeof SquadRoute
+  '/wrapped': typeof WrappedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analysis' | '/app' | '/goals'
+  fullPaths:
+    | '/'
+    | '/analysis'
+    | '/app'
+    | '/challenges'
+    | '/coach'
+    | '/goals'
+    | '/roast'
+    | '/squad'
+    | '/wrapped'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis' | '/app' | '/goals'
-  id: '__root__' | '/' | '/analysis' | '/app' | '/goals'
+  to:
+    | '/'
+    | '/analysis'
+    | '/app'
+    | '/challenges'
+    | '/coach'
+    | '/goals'
+    | '/roast'
+    | '/squad'
+    | '/wrapped'
+  id:
+    | '__root__'
+    | '/'
+    | '/analysis'
+    | '/app'
+    | '/challenges'
+    | '/coach'
+    | '/goals'
+    | '/roast'
+    | '/squad'
+    | '/wrapped'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
   AppRoute: typeof AppRoute
+  ChallengesRoute: typeof ChallengesRoute
+  CoachRoute: typeof CoachRoute
   GoalsRoute: typeof GoalsRoute
+  RoastRoute: typeof RoastRoute
+  SquadRoute: typeof SquadRoute
+  WrappedRoute: typeof WrappedRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wrapped': {
+      id: '/wrapped'
+      path: '/wrapped'
+      fullPath: '/wrapped'
+      preLoaderRoute: typeof WrappedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/squad': {
+      id: '/squad'
+      path: '/squad'
+      fullPath: '/squad'
+      preLoaderRoute: typeof SquadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roast': {
+      id: '/roast'
+      path: '/roast'
+      fullPath: '/roast'
+      preLoaderRoute: typeof RoastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/goals': {
       id: '/goals'
       path: '/goals'
       fullPath: '/goals'
       preLoaderRoute: typeof GoalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coach': {
+      id: '/coach'
+      path: '/coach'
+      fullPath: '/coach'
+      preLoaderRoute: typeof CoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/challenges': {
+      id: '/challenges'
+      path: '/challenges'
+      fullPath: '/challenges'
+      preLoaderRoute: typeof ChallengesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -106,7 +219,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
   AppRoute: AppRoute,
+  ChallengesRoute: ChallengesRoute,
+  CoachRoute: CoachRoute,
   GoalsRoute: GoalsRoute,
+  RoastRoute: RoastRoute,
+  SquadRoute: SquadRoute,
+  WrappedRoute: WrappedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
