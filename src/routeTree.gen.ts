@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WrappedRouteImport } from './routes/wrapped'
 import { Route as SquadRouteImport } from './routes/squad'
+import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
@@ -27,6 +28,11 @@ const WrappedRoute = WrappedRouteImport.update({
 const SquadRoute = SquadRouteImport.update({
   id: '/squad',
   path: '/squad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpendDnaRoute = SpendDnaRouteImport.update({
+  id: '/spend-dna',
+  path: '/spend-dna',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoastRoute = RoastRouteImport.update({
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
+  '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/wrapped': typeof WrappedRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
+  '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/wrapped': typeof WrappedRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
+  '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/wrapped': typeof WrappedRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/goals'
     | '/roast'
+    | '/spend-dna'
     | '/squad'
     | '/wrapped'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/goals'
     | '/roast'
+    | '/spend-dna'
     | '/squad'
     | '/wrapped'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/goals'
     | '/roast'
+    | '/spend-dna'
     | '/squad'
     | '/wrapped'
   fileRoutesById: FileRoutesById
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   CoachRoute: typeof CoachRoute
   GoalsRoute: typeof GoalsRoute
   RoastRoute: typeof RoastRoute
+  SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
   WrappedRoute: typeof WrappedRoute
 }
@@ -161,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/squad'
       fullPath: '/squad'
       preLoaderRoute: typeof SquadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/spend-dna': {
+      id: '/spend-dna'
+      path: '/spend-dna'
+      fullPath: '/spend-dna'
+      preLoaderRoute: typeof SpendDnaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roast': {
@@ -223,9 +243,20 @@ const rootRouteChildren: RootRouteChildren = {
   CoachRoute: CoachRoute,
   GoalsRoute: GoalsRoute,
   RoastRoute: RoastRoute,
+  SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
   WrappedRoute: WrappedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
