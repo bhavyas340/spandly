@@ -15,6 +15,7 @@ import { Route as SquadRouteImport } from './routes/squad'
 import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as MonthForecastRouteImport } from './routes/month-forecast'
+import { Route as KharchaReportRouteImport } from './routes/kharcha-report'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as CityPulseRouteImport } from './routes/city-pulse'
@@ -51,6 +52,11 @@ const RoastRoute = RoastRouteImport.update({
 const MonthForecastRoute = MonthForecastRouteImport.update({
   id: '/month-forecast',
   path: '/month-forecast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KharchaReportRoute = KharchaReportRouteImport.update({
+  id: '/kharcha-report',
+  path: '/kharcha-report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GoalsRoute = GoalsRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
     | '/spend-dna'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
     | '/spend-dna'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
     | '/spend-dna'
@@ -191,6 +203,7 @@ export interface RootRouteChildren {
   CityPulseRoute: typeof CityPulseRoute
   CoachRoute: typeof CoachRoute
   GoalsRoute: typeof GoalsRoute
+  KharchaReportRoute: typeof KharchaReportRoute
   MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
   SpendDnaRoute: typeof SpendDnaRoute
@@ -241,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/month-forecast'
       fullPath: '/month-forecast'
       preLoaderRoute: typeof MonthForecastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kharcha-report': {
+      id: '/kharcha-report'
+      path: '/kharcha-report'
+      fullPath: '/kharcha-report'
+      preLoaderRoute: typeof KharchaReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/goals': {
@@ -303,6 +323,7 @@ const rootRouteChildren: RootRouteChildren = {
   CityPulseRoute: CityPulseRoute,
   CoachRoute: CoachRoute,
   GoalsRoute: GoalsRoute,
+  KharchaReportRoute: KharchaReportRoute,
   MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
   SpendDnaRoute: SpendDnaRoute,
