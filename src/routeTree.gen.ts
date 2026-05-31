@@ -16,6 +16,7 @@ import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
+import { Route as CityPulseRouteImport } from './routes/city-pulse'
 import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
@@ -56,6 +57,11 @@ const CoachRoute = CoachRouteImport.update({
   path: '/coach',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CityPulseRoute = CityPulseRouteImport.update({
+  id: '/city-pulse',
+  path: '/city-pulse',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChallengesRoute = ChallengesRouteImport.update({
   id: '/challenges',
   path: '/challenges',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/challenges': typeof ChallengesRoute
+  '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/challenges': typeof ChallengesRoute
+  '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/challenges': typeof ChallengesRoute
+  '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/roast': typeof RoastRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/app'
     | '/challenges'
+    | '/city-pulse'
     | '/coach'
     | '/goals'
     | '/roast'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/app'
     | '/challenges'
+    | '/city-pulse'
     | '/coach'
     | '/goals'
     | '/roast'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/app'
     | '/challenges'
+    | '/city-pulse'
     | '/coach'
     | '/goals'
     | '/roast'
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   AnalysisRoute: typeof AnalysisRoute
   AppRoute: typeof AppRoute
   ChallengesRoute: typeof ChallengesRoute
+  CityPulseRoute: typeof CityPulseRoute
   CoachRoute: typeof CoachRoute
   GoalsRoute: typeof GoalsRoute
   RoastRoute: typeof RoastRoute
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/city-pulse': {
+      id: '/city-pulse'
+      path: '/city-pulse'
+      fullPath: '/city-pulse'
+      preLoaderRoute: typeof CityPulseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/challenges': {
       id: '/challenges'
       path: '/challenges'
@@ -260,6 +280,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalysisRoute: AnalysisRoute,
   AppRoute: AppRoute,
   ChallengesRoute: ChallengesRoute,
+  CityPulseRoute: CityPulseRoute,
   CoachRoute: CoachRoute,
   GoalsRoute: GoalsRoute,
   RoastRoute: RoastRoute,
