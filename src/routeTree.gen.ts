@@ -10,10 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WrappedRouteImport } from './routes/wrapped'
+import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
 import { Route as SquadRouteImport } from './routes/squad'
+import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as RoastRouteImport } from './routes/roast'
+import { Route as MonthForecastRouteImport } from './routes/month-forecast'
+import { Route as KharchaReportRouteImport } from './routes/kharcha-report'
+import { Route as IconStatusRouteImport } from './routes/icon-status'
+import { Route as HapticLabRouteImport } from './routes/haptic-lab'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
+import { Route as CityPulseRouteImport } from './routes/city-pulse'
 import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
@@ -24,14 +31,44 @@ const WrappedRoute = WrappedRouteImport.update({
   path: '/wrapped',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StreakLegacyRoute = StreakLegacyRouteImport.update({
+  id: '/streak-legacy',
+  path: '/streak-legacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SquadRoute = SquadRouteImport.update({
   id: '/squad',
   path: '/squad',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpendDnaRoute = SpendDnaRouteImport.update({
+  id: '/spend-dna',
+  path: '/spend-dna',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoastRoute = RoastRouteImport.update({
   id: '/roast',
   path: '/roast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonthForecastRoute = MonthForecastRouteImport.update({
+  id: '/month-forecast',
+  path: '/month-forecast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KharchaReportRoute = KharchaReportRouteImport.update({
+  id: '/kharcha-report',
+  path: '/kharcha-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IconStatusRoute = IconStatusRouteImport.update({
+  id: '/icon-status',
+  path: '/icon-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HapticLabRoute = HapticLabRouteImport.update({
+  id: '/haptic-lab',
+  path: '/haptic-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GoalsRoute = GoalsRouteImport.update({
@@ -42,6 +79,11 @@ const GoalsRoute = GoalsRouteImport.update({
 const CoachRoute = CoachRouteImport.update({
   id: '/coach',
   path: '/coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CityPulseRoute = CityPulseRouteImport.update({
+  id: '/city-pulse',
+  path: '/city-pulse',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChallengesRoute = ChallengesRouteImport.update({
@@ -70,10 +112,17 @@ export interface FileRoutesByFullPath {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/challenges': typeof ChallengesRoute
+  '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/haptic-lab': typeof HapticLabRoute
+  '/icon-status': typeof IconStatusRoute
+  '/kharcha-report': typeof KharchaReportRoute
+  '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
+  '/streak-legacy': typeof StreakLegacyRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesByTo {
@@ -81,10 +130,17 @@ export interface FileRoutesByTo {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/challenges': typeof ChallengesRoute
+  '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/haptic-lab': typeof HapticLabRoute
+  '/icon-status': typeof IconStatusRoute
+  '/kharcha-report': typeof KharchaReportRoute
+  '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
+  '/streak-legacy': typeof StreakLegacyRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesById {
@@ -93,10 +149,17 @@ export interface FileRoutesById {
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
   '/challenges': typeof ChallengesRoute
+  '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/haptic-lab': typeof HapticLabRoute
+  '/icon-status': typeof IconStatusRoute
+  '/kharcha-report': typeof KharchaReportRoute
+  '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
+  '/streak-legacy': typeof StreakLegacyRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRouteTypes {
@@ -106,10 +169,17 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/app'
     | '/challenges'
+    | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/haptic-lab'
+    | '/icon-status'
+    | '/kharcha-report'
+    | '/month-forecast'
     | '/roast'
+    | '/spend-dna'
     | '/squad'
+    | '/streak-legacy'
     | '/wrapped'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -117,10 +187,17 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/app'
     | '/challenges'
+    | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/haptic-lab'
+    | '/icon-status'
+    | '/kharcha-report'
+    | '/month-forecast'
     | '/roast'
+    | '/spend-dna'
     | '/squad'
+    | '/streak-legacy'
     | '/wrapped'
   id:
     | '__root__'
@@ -128,10 +205,17 @@ export interface FileRouteTypes {
     | '/analysis'
     | '/app'
     | '/challenges'
+    | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/haptic-lab'
+    | '/icon-status'
+    | '/kharcha-report'
+    | '/month-forecast'
     | '/roast'
+    | '/spend-dna'
     | '/squad'
+    | '/streak-legacy'
     | '/wrapped'
   fileRoutesById: FileRoutesById
 }
@@ -140,10 +224,17 @@ export interface RootRouteChildren {
   AnalysisRoute: typeof AnalysisRoute
   AppRoute: typeof AppRoute
   ChallengesRoute: typeof ChallengesRoute
+  CityPulseRoute: typeof CityPulseRoute
   CoachRoute: typeof CoachRoute
   GoalsRoute: typeof GoalsRoute
+  HapticLabRoute: typeof HapticLabRoute
+  IconStatusRoute: typeof IconStatusRoute
+  KharchaReportRoute: typeof KharchaReportRoute
+  MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
+  SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
+  StreakLegacyRoute: typeof StreakLegacyRoute
   WrappedRoute: typeof WrappedRoute
 }
 
@@ -156,6 +247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WrappedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/streak-legacy': {
+      id: '/streak-legacy'
+      path: '/streak-legacy'
+      fullPath: '/streak-legacy'
+      preLoaderRoute: typeof StreakLegacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/squad': {
       id: '/squad'
       path: '/squad'
@@ -163,11 +261,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SquadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/spend-dna': {
+      id: '/spend-dna'
+      path: '/spend-dna'
+      fullPath: '/spend-dna'
+      preLoaderRoute: typeof SpendDnaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/roast': {
       id: '/roast'
       path: '/roast'
       fullPath: '/roast'
       preLoaderRoute: typeof RoastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/month-forecast': {
+      id: '/month-forecast'
+      path: '/month-forecast'
+      fullPath: '/month-forecast'
+      preLoaderRoute: typeof MonthForecastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kharcha-report': {
+      id: '/kharcha-report'
+      path: '/kharcha-report'
+      fullPath: '/kharcha-report'
+      preLoaderRoute: typeof KharchaReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/icon-status': {
+      id: '/icon-status'
+      path: '/icon-status'
+      fullPath: '/icon-status'
+      preLoaderRoute: typeof IconStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/haptic-lab': {
+      id: '/haptic-lab'
+      path: '/haptic-lab'
+      fullPath: '/haptic-lab'
+      preLoaderRoute: typeof HapticLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/goals': {
@@ -182,6 +315,13 @@ declare module '@tanstack/react-router' {
       path: '/coach'
       fullPath: '/coach'
       preLoaderRoute: typeof CoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/city-pulse': {
+      id: '/city-pulse'
+      path: '/city-pulse'
+      fullPath: '/city-pulse'
+      preLoaderRoute: typeof CityPulseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/challenges': {
@@ -220,10 +360,17 @@ const rootRouteChildren: RootRouteChildren = {
   AnalysisRoute: AnalysisRoute,
   AppRoute: AppRoute,
   ChallengesRoute: ChallengesRoute,
+  CityPulseRoute: CityPulseRoute,
   CoachRoute: CoachRoute,
   GoalsRoute: GoalsRoute,
+  HapticLabRoute: HapticLabRoute,
+  IconStatusRoute: IconStatusRoute,
+  KharchaReportRoute: KharchaReportRoute,
+  MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
+  SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
+  StreakLegacyRoute: StreakLegacyRoute,
   WrappedRoute: WrappedRoute,
 }
 export const routeTree = rootRouteImport
