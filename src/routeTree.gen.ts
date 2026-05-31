@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WrappedRouteImport } from './routes/wrapped'
+import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as RoastRouteImport } from './routes/roast'
@@ -23,6 +24,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const WrappedRoute = WrappedRouteImport.update({
   id: '/wrapped',
   path: '/wrapped',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StreakLegacyRoute = StreakLegacyRouteImport.update({
+  id: '/streak-legacy',
+  path: '/streak-legacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SquadRoute = SquadRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
+  '/streak-legacy': typeof StreakLegacyRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
+  '/streak-legacy': typeof StreakLegacyRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
+  '/streak-legacy': typeof StreakLegacyRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/roast'
     | '/spend-dna'
     | '/squad'
+    | '/streak-legacy'
     | '/wrapped'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/roast'
     | '/spend-dna'
     | '/squad'
+    | '/streak-legacy'
     | '/wrapped'
   id:
     | '__root__'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/roast'
     | '/spend-dna'
     | '/squad'
+    | '/streak-legacy'
     | '/wrapped'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   RoastRoute: typeof RoastRoute
   SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
+  StreakLegacyRoute: typeof StreakLegacyRoute
   WrappedRoute: typeof WrappedRoute
 }
 
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/wrapped'
       fullPath: '/wrapped'
       preLoaderRoute: typeof WrappedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/streak-legacy': {
+      id: '/streak-legacy'
+      path: '/streak-legacy'
+      fullPath: '/streak-legacy'
+      preLoaderRoute: typeof StreakLegacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/squad': {
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoastRoute: RoastRoute,
   SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
+  StreakLegacyRoute: StreakLegacyRoute,
   WrappedRoute: WrappedRoute,
 }
 export const routeTree = rootRouteImport
