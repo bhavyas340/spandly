@@ -150,6 +150,14 @@ function AppShell() {
                     <TrendingUp size={15} /> Analysis
                   </Link>
                   <div className="h-px bg-black/5" />
+                  <Link to="/spend-dna" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>✦</span> Spend DNA</Link>
+                  <Link to="/streak-legacy" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🏆</span> Streak Legacy</Link>
+                  <Link to="/city-pulse" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🏙️</span> City Pulse</Link>
+                  <Link to="/month-forecast" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>📅</span> Month Forecast</Link>
+                  <Link to="/kharcha-report" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>📄</span> Kharcha Report</Link>
+                  <Link to="/haptic-lab" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>💥</span> Haptic Lab</Link>
+                  <Link to="/icon-status" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🔥</span> App Icon</Link>
+                  <div className="h-px bg-black/5" />
                   <Link to="/roast" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
                     <span>🔥</span> Roast Me
                   </Link>
