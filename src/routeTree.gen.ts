@@ -14,6 +14,7 @@ import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as RoastRouteImport } from './routes/roast'
+import { Route as MonthForecastRouteImport } from './routes/month-forecast'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as CityPulseRouteImport } from './routes/city-pulse'
@@ -45,6 +46,11 @@ const SpendDnaRoute = SpendDnaRouteImport.update({
 const RoastRoute = RoastRouteImport.update({
   id: '/roast',
   path: '/roast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonthForecastRoute = MonthForecastRouteImport.update({
+  id: '/month-forecast',
+  path: '/month-forecast',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GoalsRoute = GoalsRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
+  '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/month-forecast'
     | '/roast'
     | '/spend-dna'
     | '/squad'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/month-forecast'
     | '/roast'
     | '/spend-dna'
     | '/squad'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/city-pulse'
     | '/coach'
     | '/goals'
+    | '/month-forecast'
     | '/roast'
     | '/spend-dna'
     | '/squad'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   CityPulseRoute: typeof CityPulseRoute
   CoachRoute: typeof CoachRoute
   GoalsRoute: typeof GoalsRoute
+  MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
   SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/roast'
       fullPath: '/roast'
       preLoaderRoute: typeof RoastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/month-forecast': {
+      id: '/month-forecast'
+      path: '/month-forecast'
+      fullPath: '/month-forecast'
+      preLoaderRoute: typeof MonthForecastRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/goals': {
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   CityPulseRoute: CityPulseRoute,
   CoachRoute: CoachRoute,
   GoalsRoute: GoalsRoute,
+  MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
   SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
