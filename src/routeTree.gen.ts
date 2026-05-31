@@ -16,6 +16,7 @@ import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as MonthForecastRouteImport } from './routes/month-forecast'
 import { Route as KharchaReportRouteImport } from './routes/kharcha-report'
+import { Route as IconStatusRouteImport } from './routes/icon-status'
 import { Route as HapticLabRouteImport } from './routes/haptic-lab'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
@@ -58,6 +59,11 @@ const MonthForecastRoute = MonthForecastRouteImport.update({
 const KharchaReportRoute = KharchaReportRouteImport.update({
   id: '/kharcha-report',
   path: '/kharcha-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IconStatusRoute = IconStatusRouteImport.update({
+  id: '/icon-status',
+  path: '/icon-status',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HapticLabRoute = HapticLabRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/haptic-lab': typeof HapticLabRoute
+  '/icon-status': typeof IconStatusRoute
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/haptic-lab': typeof HapticLabRoute
+  '/icon-status': typeof IconStatusRoute
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/coach': typeof CoachRoute
   '/goals': typeof GoalsRoute
   '/haptic-lab': typeof HapticLabRoute
+  '/icon-status': typeof IconStatusRoute
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/goals'
     | '/haptic-lab'
+    | '/icon-status'
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/goals'
     | '/haptic-lab'
+    | '/icon-status'
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/goals'
     | '/haptic-lab'
+    | '/icon-status'
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
@@ -216,6 +228,7 @@ export interface RootRouteChildren {
   CoachRoute: typeof CoachRoute
   GoalsRoute: typeof GoalsRoute
   HapticLabRoute: typeof HapticLabRoute
+  IconStatusRoute: typeof IconStatusRoute
   KharchaReportRoute: typeof KharchaReportRoute
   MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       path: '/kharcha-report'
       fullPath: '/kharcha-report'
       preLoaderRoute: typeof KharchaReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/icon-status': {
+      id: '/icon-status'
+      path: '/icon-status'
+      fullPath: '/icon-status'
+      preLoaderRoute: typeof IconStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/haptic-lab': {
@@ -344,6 +364,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachRoute: CoachRoute,
   GoalsRoute: GoalsRoute,
   HapticLabRoute: HapticLabRoute,
+  IconStatusRoute: IconStatusRoute,
   KharchaReportRoute: KharchaReportRoute,
   MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
