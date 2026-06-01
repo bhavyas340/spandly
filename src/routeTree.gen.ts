@@ -13,6 +13,7 @@ import { Route as WrappedRouteImport } from './routes/wrapped'
 import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as SpendDnaRouteImport } from './routes/spend-dna'
+import { Route as SnapToLogRouteImport } from './routes/snap-to-log'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as MonthForecastRouteImport } from './routes/month-forecast'
 import { Route as KharchaReportRouteImport } from './routes/kharcha-report'
@@ -44,6 +45,11 @@ const SquadRoute = SquadRouteImport.update({
 const SpendDnaRoute = SpendDnaRouteImport.update({
   id: '/spend-dna',
   path: '/spend-dna',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SnapToLogRoute = SnapToLogRouteImport.update({
+  id: '/snap-to-log',
+  path: '/snap-to-log',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoastRoute = RoastRouteImport.update({
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
@@ -232,6 +244,7 @@ export interface RootRouteChildren {
   KharchaReportRoute: typeof KharchaReportRoute
   MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
+  SnapToLogRoute: typeof SnapToLogRoute
   SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
   StreakLegacyRoute: typeof StreakLegacyRoute
@@ -266,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/spend-dna'
       fullPath: '/spend-dna'
       preLoaderRoute: typeof SpendDnaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/snap-to-log': {
+      id: '/snap-to-log'
+      path: '/snap-to-log'
+      fullPath: '/snap-to-log'
+      preLoaderRoute: typeof SnapToLogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roast': {
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   KharchaReportRoute: KharchaReportRoute,
   MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
+  SnapToLogRoute: SnapToLogRoute,
   SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
   StreakLegacyRoute: StreakLegacyRoute,
