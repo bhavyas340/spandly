@@ -9,10 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as XpRouteImport } from './routes/xp'
 import { Route as WrappedRouteImport } from './routes/wrapped'
+import { Route as WhatsappShareRouteImport } from './routes/whatsapp-share'
+import { Route as SubscriptionsRouteImport } from './routes/subscriptions'
 import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as SpendDnaRouteImport } from './routes/spend-dna'
+import { Route as SnapToLogRouteImport } from './routes/snap-to-log'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as MonthForecastRouteImport } from './routes/month-forecast'
 import { Route as KharchaReportRouteImport } from './routes/kharcha-report'
@@ -22,13 +26,29 @@ import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as CityPulseRouteImport } from './routes/city-pulse'
 import { Route as ChallengesRouteImport } from './routes/challenges'
+import { Route as ChaiIndexRouteImport } from './routes/chai-index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
 
+const XpRoute = XpRouteImport.update({
+  id: '/xp',
+  path: '/xp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WrappedRoute = WrappedRouteImport.update({
   id: '/wrapped',
   path: '/wrapped',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhatsappShareRoute = WhatsappShareRouteImport.update({
+  id: '/whatsapp-share',
+  path: '/whatsapp-share',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscriptionsRoute = SubscriptionsRouteImport.update({
+  id: '/subscriptions',
+  path: '/subscriptions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StreakLegacyRoute = StreakLegacyRouteImport.update({
@@ -44,6 +64,11 @@ const SquadRoute = SquadRouteImport.update({
 const SpendDnaRoute = SpendDnaRouteImport.update({
   id: '/spend-dna',
   path: '/spend-dna',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SnapToLogRoute = SnapToLogRouteImport.update({
+  id: '/snap-to-log',
+  path: '/snap-to-log',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoastRoute = RoastRouteImport.update({
@@ -91,6 +116,11 @@ const ChallengesRoute = ChallengesRouteImport.update({
   path: '/challenges',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChaiIndexRoute = ChaiIndexRouteImport.update({
+  id: '/chai-index',
+  path: '/chai-index',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -111,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/chai-index': typeof ChaiIndexRoute
   '/challenges': typeof ChallengesRoute
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
@@ -120,15 +151,20 @@ export interface FileRoutesByFullPath {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
+  '/subscriptions': typeof SubscriptionsRoute
+  '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
+  '/xp': typeof XpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/chai-index': typeof ChaiIndexRoute
   '/challenges': typeof ChallengesRoute
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
@@ -138,16 +174,21 @@ export interface FileRoutesByTo {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
+  '/subscriptions': typeof SubscriptionsRoute
+  '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
+  '/xp': typeof XpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/chai-index': typeof ChaiIndexRoute
   '/challenges': typeof ChallengesRoute
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
@@ -157,10 +198,14 @@ export interface FileRoutesById {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
+  '/subscriptions': typeof SubscriptionsRoute
+  '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
+  '/xp': typeof XpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -168,6 +213,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/app'
+    | '/chai-index'
     | '/challenges'
     | '/city-pulse'
     | '/coach'
@@ -177,15 +223,20 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
+    | '/subscriptions'
+    | '/whatsapp-share'
     | '/wrapped'
+    | '/xp'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/analysis'
     | '/app'
+    | '/chai-index'
     | '/challenges'
     | '/city-pulse'
     | '/coach'
@@ -195,15 +246,20 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
+    | '/subscriptions'
+    | '/whatsapp-share'
     | '/wrapped'
+    | '/xp'
   id:
     | '__root__'
     | '/'
     | '/analysis'
     | '/app'
+    | '/chai-index'
     | '/challenges'
     | '/city-pulse'
     | '/coach'
@@ -213,16 +269,21 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
+    | '/subscriptions'
+    | '/whatsapp-share'
     | '/wrapped'
+    | '/xp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
   AppRoute: typeof AppRoute
+  ChaiIndexRoute: typeof ChaiIndexRoute
   ChallengesRoute: typeof ChallengesRoute
   CityPulseRoute: typeof CityPulseRoute
   CoachRoute: typeof CoachRoute
@@ -232,19 +293,44 @@ export interface RootRouteChildren {
   KharchaReportRoute: typeof KharchaReportRoute
   MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
+  SnapToLogRoute: typeof SnapToLogRoute
   SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
   StreakLegacyRoute: typeof StreakLegacyRoute
+  SubscriptionsRoute: typeof SubscriptionsRoute
+  WhatsappShareRoute: typeof WhatsappShareRoute
   WrappedRoute: typeof WrappedRoute
+  XpRoute: typeof XpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/xp': {
+      id: '/xp'
+      path: '/xp'
+      fullPath: '/xp'
+      preLoaderRoute: typeof XpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wrapped': {
       id: '/wrapped'
       path: '/wrapped'
       fullPath: '/wrapped'
       preLoaderRoute: typeof WrappedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/whatsapp-share': {
+      id: '/whatsapp-share'
+      path: '/whatsapp-share'
+      fullPath: '/whatsapp-share'
+      preLoaderRoute: typeof WhatsappShareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscriptions': {
+      id: '/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/subscriptions'
+      preLoaderRoute: typeof SubscriptionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/streak-legacy': {
@@ -266,6 +352,13 @@ declare module '@tanstack/react-router' {
       path: '/spend-dna'
       fullPath: '/spend-dna'
       preLoaderRoute: typeof SpendDnaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/snap-to-log': {
+      id: '/snap-to-log'
+      path: '/snap-to-log'
+      fullPath: '/snap-to-log'
+      preLoaderRoute: typeof SnapToLogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roast': {
@@ -331,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChallengesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chai-index': {
+      id: '/chai-index'
+      path: '/chai-index'
+      fullPath: '/chai-index'
+      preLoaderRoute: typeof ChaiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -359,6 +459,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
   AppRoute: AppRoute,
+  ChaiIndexRoute: ChaiIndexRoute,
   ChallengesRoute: ChallengesRoute,
   CityPulseRoute: CityPulseRoute,
   CoachRoute: CoachRoute,
@@ -368,10 +469,14 @@ const rootRouteChildren: RootRouteChildren = {
   KharchaReportRoute: KharchaReportRoute,
   MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
+  SnapToLogRoute: SnapToLogRoute,
   SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
   StreakLegacyRoute: StreakLegacyRoute,
+  SubscriptionsRoute: SubscriptionsRoute,
+  WhatsappShareRoute: WhatsappShareRoute,
   WrappedRoute: WrappedRoute,
+  XpRoute: XpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
