@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WrappedRouteImport } from './routes/wrapped'
+import { Route as WhatsappShareRouteImport } from './routes/whatsapp-share'
 import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as SpendDnaRouteImport } from './routes/spend-dna'
@@ -30,6 +31,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const WrappedRoute = WrappedRouteImport.update({
   id: '/wrapped',
   path: '/wrapped',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhatsappShareRoute = WhatsappShareRouteImport.update({
+  id: '/whatsapp-share',
+  path: '/whatsapp-share',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StreakLegacyRoute = StreakLegacyRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
+  '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
+  '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
   '/streak-legacy': typeof StreakLegacyRoute
+  '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
+    | '/whatsapp-share'
     | '/wrapped'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
+    | '/whatsapp-share'
     | '/wrapped'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/spend-dna'
     | '/squad'
     | '/streak-legacy'
+    | '/whatsapp-share'
     | '/wrapped'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
   StreakLegacyRoute: typeof StreakLegacyRoute
+  WhatsappShareRoute: typeof WhatsappShareRoute
   WrappedRoute: typeof WrappedRoute
 }
 
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/wrapped'
       fullPath: '/wrapped'
       preLoaderRoute: typeof WrappedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/whatsapp-share': {
+      id: '/whatsapp-share'
+      path: '/whatsapp-share'
+      fullPath: '/whatsapp-share'
+      preLoaderRoute: typeof WhatsappShareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/streak-legacy': {
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
   StreakLegacyRoute: StreakLegacyRoute,
+  WhatsappShareRoute: WhatsappShareRoute,
   WrappedRoute: WrappedRoute,
 }
 export const routeTree = rootRouteImport
