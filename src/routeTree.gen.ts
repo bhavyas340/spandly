@@ -25,6 +25,7 @@ import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as CityPulseRouteImport } from './routes/city-pulse'
 import { Route as ChallengesRouteImport } from './routes/challenges'
+import { Route as ChaiIndexRouteImport } from './routes/chai-index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
@@ -109,6 +110,11 @@ const ChallengesRoute = ChallengesRouteImport.update({
   path: '/challenges',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChaiIndexRoute = ChaiIndexRouteImport.update({
+  id: '/chai-index',
+  path: '/chai-index',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/chai-index': typeof ChaiIndexRoute
   '/challenges': typeof ChallengesRoute
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/chai-index': typeof ChaiIndexRoute
   '/challenges': typeof ChallengesRoute
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRoute
   '/app': typeof AppRoute
+  '/chai-index': typeof ChaiIndexRoute
   '/challenges': typeof ChallengesRoute
   '/city-pulse': typeof CityPulseRoute
   '/coach': typeof CoachRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/app'
+    | '/chai-index'
     | '/challenges'
     | '/city-pulse'
     | '/coach'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/app'
+    | '/chai-index'
     | '/challenges'
     | '/city-pulse'
     | '/coach'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analysis'
     | '/app'
+    | '/chai-index'
     | '/challenges'
     | '/city-pulse'
     | '/coach'
@@ -259,6 +271,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRoute
   AppRoute: typeof AppRoute
+  ChaiIndexRoute: typeof ChaiIndexRoute
   ChallengesRoute: typeof ChallengesRoute
   CityPulseRoute: typeof CityPulseRoute
   CoachRoute: typeof CoachRoute
@@ -391,6 +404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChallengesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chai-index': {
+      id: '/chai-index'
+      path: '/chai-index'
+      fullPath: '/chai-index'
+      preLoaderRoute: typeof ChaiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -419,6 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRoute,
   AppRoute: AppRoute,
+  ChaiIndexRoute: ChaiIndexRoute,
   ChallengesRoute: ChallengesRoute,
   CityPulseRoute: CityPulseRoute,
   CoachRoute: CoachRoute,
