@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as XpRouteImport } from './routes/xp'
 import { Route as WrappedRouteImport } from './routes/wrapped'
 import { Route as WhatsappShareRouteImport } from './routes/whatsapp-share'
 import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
@@ -28,6 +29,11 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AnalysisRouteImport } from './routes/analysis'
 import { Route as IndexRouteImport } from './routes/index'
 
+const XpRoute = XpRouteImport.update({
+  id: '/xp',
+  path: '/xp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WrappedRoute = WrappedRouteImport.update({
   id: '/wrapped',
   path: '/wrapped',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/streak-legacy': typeof StreakLegacyRoute
   '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
+  '/xp': typeof XpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/streak-legacy': typeof StreakLegacyRoute
   '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
+  '/xp': typeof XpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/streak-legacy': typeof StreakLegacyRoute
   '/whatsapp-share': typeof WhatsappShareRoute
   '/wrapped': typeof WrappedRoute
+  '/xp': typeof XpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/streak-legacy'
     | '/whatsapp-share'
     | '/wrapped'
+    | '/xp'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/streak-legacy'
     | '/whatsapp-share'
     | '/wrapped'
+    | '/xp'
   id:
     | '__root__'
     | '/'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/streak-legacy'
     | '/whatsapp-share'
     | '/wrapped'
+    | '/xp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -262,10 +274,18 @@ export interface RootRouteChildren {
   StreakLegacyRoute: typeof StreakLegacyRoute
   WhatsappShareRoute: typeof WhatsappShareRoute
   WrappedRoute: typeof WrappedRoute
+  XpRoute: typeof XpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/xp': {
+      id: '/xp'
+      path: '/xp'
+      fullPath: '/xp'
+      preLoaderRoute: typeof XpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wrapped': {
       id: '/wrapped'
       path: '/wrapped'
@@ -414,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   StreakLegacyRoute: StreakLegacyRoute,
   WhatsappShareRoute: WhatsappShareRoute,
   WrappedRoute: WrappedRoute,
+  XpRoute: XpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
