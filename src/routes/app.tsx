@@ -158,6 +158,12 @@ function AppShell() {
                   <Link to="/haptic-lab" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>💥</span> Haptic Lab</Link>
                   <Link to="/icon-status" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🔥</span> App Icon</Link>
                   <div className="h-px bg-black/5" />
+                  <Link to="/snap-to-log" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>📸</span> Snap to Log</Link>
+                  <Link to="/whatsapp-share" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>💬</span> Share on WhatsApp</Link>
+                  <Link to="/xp" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>⚡</span> XP & Levels</Link>
+                  <Link to="/chai-index" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🍛</span> Chai Index</Link>
+                  <Link to="/subscriptions" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>💳</span> Subscriptions</Link>
+                  <div className="h-px bg-black/5" />
                   <Link to="/roast" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
                     <span>🔥</span> Roast Me
                   </Link>
