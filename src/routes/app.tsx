@@ -119,7 +119,7 @@ function AppShell() {
         {/* Phone status bar */}
         <div className="flex items-center justify-between px-7 pt-4 pb-2 text-[13px] font-semibold text-black/90">
           <LiveClock />
-          <Link to="/" className="text-black/40 hover:text-black/70 transition">
+          <Link to="/" aria-label="Back to home" className="text-black/40 hover:text-black/70 transition">
             <ArrowLeft size={16} />
           </Link>
           <span className="tracking-tight">●●● ⌃ ▮</span>
