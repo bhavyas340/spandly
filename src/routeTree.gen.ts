@@ -17,6 +17,7 @@ import { Route as StreakLegacyRouteImport } from './routes/streak-legacy'
 import { Route as SquadRouteImport } from './routes/squad'
 import { Route as SpendDnaRouteImport } from './routes/spend-dna'
 import { Route as SnapToLogRouteImport } from './routes/snap-to-log'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as MonthForecastRouteImport } from './routes/month-forecast'
 import { Route as KharchaReportRouteImport } from './routes/kharcha-report'
@@ -69,6 +70,11 @@ const SpendDnaRoute = SpendDnaRouteImport.update({
 const SnapToLogRoute = SnapToLogRouteImport.update({
   id: '/snap-to-log',
   path: '/snap-to-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoastRoute = RoastRouteImport.update({
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/kharcha-report': typeof KharchaReportRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/snap-to-log': typeof SnapToLogRoute
   '/spend-dna': typeof SpendDnaRoute
   '/squad': typeof SquadRoute
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/sitemap.xml'
     | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/sitemap.xml'
     | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/kharcha-report'
     | '/month-forecast'
     | '/roast'
+    | '/sitemap.xml'
     | '/snap-to-log'
     | '/spend-dna'
     | '/squad'
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   KharchaReportRoute: typeof KharchaReportRoute
   MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SnapToLogRoute: typeof SnapToLogRoute
   SpendDnaRoute: typeof SpendDnaRoute
   SquadRoute: typeof SquadRoute
@@ -359,6 +372,13 @@ declare module '@tanstack/react-router' {
       path: '/snap-to-log'
       fullPath: '/snap-to-log'
       preLoaderRoute: typeof SnapToLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roast': {
@@ -469,6 +489,7 @@ const rootRouteChildren: RootRouteChildren = {
   KharchaReportRoute: KharchaReportRoute,
   MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SnapToLogRoute: SnapToLogRoute,
   SpendDnaRoute: SpendDnaRoute,
   SquadRoute: SquadRoute,
@@ -481,13 +502,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
