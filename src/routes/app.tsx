@@ -196,6 +196,7 @@ function AppShell() {
           </div>
         </div>
 
+        <main>
         {/* Date + Today Total card — click to open calendar */}
         <div className="px-5 pb-4">
           <button
@@ -236,7 +237,9 @@ function AppShell() {
             <ExpenseCard key={e.id} e={e} onImage={(img) => setImageOn(e.id, img)} />
           ))}
         </div>
+        </main>
       </div>
+
 
       {/* Bottom dock */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[440px] px-5 pb-6 pt-4 z-40 pointer-events-none">
