@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://spandly.lovable.app/sitemap.xml

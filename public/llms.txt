@@ -1,0 +1,18 @@
+# Spendly
+
+> Voice-first, UPI-native expense tracker for India. Log chai, auto, lunch and QR payments in 3 seconds — with streaks, goals, and a 9 PM shock report.
+
+Spendly is a mobile-first expense tracker built for how Indians actually spend: small, frequent, mixed-mode (UPI + cash + QR). It supports voice and receipt-scan logging, daily streaks, savings goals, and weekly/monthly analysis.
+
+## Pages
+
+- [Home](/): Product overview, features, pricing, and FAQs.
+- [App](/app): The daily dashboard — log expenses, view today's spend, open the calendar, scan receipts.
+- [Goals](/goals): Track savings goals with progress bars and edit/delete controls.
+- [Analysis](/analysis): Graphical breakdown of spending by day, week, month, quarter, half-year, and year.
+
+## Optional
+
+- [Subscriptions](/subscriptions): Recurring-charge tracker with cancel reminders.
+- [Snap to Log](/snap-to-log): OCR receipt capture flow.
+- [Chai Index](/chai-index): City-wise spending benchmark.
