@@ -127,7 +127,7 @@ function AppShell() {
 
         {/* Header */}
         <div className="px-6 pt-2 pb-4 flex items-center justify-between">
-          <h1 className="text-[34px] leading-none font-bold tracking-tight text-black">Spendly</h1>
+          <h1 className="text-[34px] leading-none font-bold tracking-tight text-black">Spendly — Daily Expenses</h1>
           <div className="flex items-center gap-2 relative">
             <Link
               to="/goals"
@@ -329,7 +329,7 @@ function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => voi
             aria-label="Add photo"
           >
             {e.image ? (
-              <img src={e.image} alt={e.label} className="w-full h-full object-cover" />
+              <img src={e.image} alt={`Expense photo: ${e.label}`} className="w-full h-full object-cover" />
             ) : (
               <Camera size={16} className="text-black/55" />
             )}
@@ -449,6 +449,7 @@ function ManualModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Close add expense"
             className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/60 shadow-sm"
           >
             <X size={16} />
@@ -457,7 +458,7 @@ function ManualModal({
 
         {image && (
           <div className="rounded-[22px] overflow-hidden mb-3 bg-white/90 border border-black/5 shadow-sm aspect-[16/9]">
-            <img src={image} alt="receipt" className="w-full h-full object-cover" />
+            <img src={image} alt="Receipt photo preview" className="w-full h-full object-cover" />
           </div>
         )}
 
@@ -552,20 +553,20 @@ function CalendarModal({
       >
         <div className="flex items-center justify-between mb-4">
           <div className="text-[18px] font-bold text-black">Pick a day</div>
-          <button onClick={onClose} className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/60 shadow-sm">
+          <button onClick={onClose} aria-label="Close calendar" className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/60 shadow-sm">
             <X size={16} />
           </button>
         </div>
 
         <div className="rounded-[24px] bg-white/95 border border-black/5 shadow-sm p-4">
           <div className="flex items-center justify-between mb-3">
-            <button onClick={prevMonth} className="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center text-black/70">
+            <button onClick={prevMonth} aria-label="Previous month" className="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center text-black/70">
               <ChevronLeft size={16} />
             </button>
             <div className="text-[15px] font-bold text-black">
               {view.toLocaleDateString("en-IN", { month: "long", year: "numeric" })}
             </div>
-            <button onClick={nextMonth} className="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center text-black/70">
+            <button onClick={nextMonth} aria-label="Next month" className="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center text-black/70">
               <ChevronRight size={16} />
             </button>
           </div>
@@ -678,7 +679,7 @@ function VoiceModal({
 
         <div className="relative flex items-center justify-between px-7 pt-4 pb-2 text-[13px] font-semibold text-white">
           <LiveClock />
-          <button onClick={onClose} className="text-white/70 hover:text-white">
+          <button onClick={onClose} aria-label="Close voice input" className="text-white/70 hover:text-white">
             <X size={18} />
           </button>
         </div>

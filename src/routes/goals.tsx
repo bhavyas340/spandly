@@ -122,7 +122,7 @@ function GoalCard({ g, onEdit, onDelete }: { g: Goal; onEdit: () => void; onDele
           style={{ borderRadius: 18 }}
         >
           {g.image ? (
-            <img src={g.image} alt={g.title} className="w-full h-full object-cover" />
+            <img src={g.image} alt={`Goal photo: ${g.title}`} className="w-full h-full object-cover" />
           ) : (
             <Camera size={20} className="text-black/55" />
           )}
@@ -138,10 +138,10 @@ function GoalCard({ g, onEdit, onDelete }: { g: Goal; onEdit: () => void; onDele
           <div className="text-[11px] font-semibold text-black/55 mt-1">{pct}%</div>
         </div>
         <div className="flex flex-col gap-1.5">
-          <button onClick={onEdit} className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center text-black/70 shadow-sm">
+          <button onClick={onEdit} aria-label={`Edit goal ${g.title}`} className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center text-black/70 shadow-sm">
             <Pencil size={14} />
           </button>
-          <button onClick={onDelete} className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center text-black/60 shadow-sm">
+          <button onClick={onDelete} aria-label={`Delete goal ${g.title}`} className="w-8 h-8 rounded-full bg-white/70 flex items-center justify-center text-black/60 shadow-sm">
             <Trash2 size={14} />
           </button>
         </div>
@@ -222,13 +222,14 @@ function GoalEditor({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 pt-5 pb-4">
-          <button onClick={onClose} className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/70 shadow-sm">
+          <button onClick={onClose} aria-label="Close goal editor" className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-black/70 shadow-sm">
             <X size={18} />
           </button>
           <div className="text-[15px] font-bold text-black">{initial ? "Edit Goal" : "New Goal"}</div>
           <button
             onClick={submit}
             disabled={!canSave}
+            aria-label="Save goal"
             className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center shadow-sm disabled:opacity-30"
           >
             <Check size={18} />
@@ -242,7 +243,7 @@ function GoalEditor({
             className="w-full rounded-[24px] bg-white/90 border border-black/5 shadow-sm overflow-hidden aspect-[2/1] flex items-center justify-center"
           >
             {image ? (
-              <img src={image} alt="goal" className="w-full h-full object-cover" />
+              <img src={image} alt="Goal photo preview" className="w-full h-full object-cover" />
             ) : (
               <div className="flex flex-col items-center gap-1.5 text-black/50">
                 <Camera size={22} />
