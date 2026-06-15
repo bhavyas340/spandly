@@ -7,9 +7,13 @@ export const Route = createFileRoute("/goals")({
   component: GoalsPage,
   head: () => ({
     meta: [
-      { title: "Spendly — Goals" },
-      { name: "description", content: "Set goals with voice or text. Save toward what matters." },
+      { title: "Spendly — Savings Goals" },
+      { name: "description", content: "Create savings goals in Spendly with voice or text. Track progress toward trips, gadgets, and the things that matter — one rupee at a time." },
+      { property: "og:title", content: "Spendly — Savings Goals" },
+      { property: "og:description", content: "Create savings goals with voice or text and track progress toward what matters." },
+      { property: "og:url", content: "https://spandly.lovable.app/goals" },
     ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/goals" }],
   }),
 });
 
