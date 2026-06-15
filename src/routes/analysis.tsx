@@ -19,9 +19,13 @@ export const Route = createFileRoute("/analysis")({
   component: AnalysisPage,
   head: () => ({
     meta: [
-      { title: "Spendly — Analysis" },
-      { name: "description", content: "See where your money goes." },
+      { title: "Spendly — Spending Analysis" },
+      { name: "description", content: "Visualise your Spendly history with line and bar charts by day, week, month, quarter, half year and year — see exactly where your money goes." },
+      { property: "og:title", content: "Spendly — Spending Analysis" },
+      { property: "og:description", content: "Line and bar charts of your spending by day, week, month, quarter, half year, and year." },
+      { property: "og:url", content: "https://spandly.lovable.app/analysis" },
     ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/analysis" }],
   }),
 });
 

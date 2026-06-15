@@ -9,6 +9,10 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Voice-first, UPI-native expense tracker built for chai, auto, Zepto and every tiny daily spend. Log in 3 seconds. Trusted by 50,000+ Indians." },
       { property: "og:title", content: "Spendly — Speak it. Log it. Done." },
       { property: "og:description", content: "The fastest way Indians track money. Voice. UPI. WhatsApp-ready report cards." },
+      { property: "og:url", content: "https://spandly.lovable.app/" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://spandly.lovable.app/" },
     ],
   }),
 });
