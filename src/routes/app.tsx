@@ -19,9 +19,13 @@ export const Route = createFileRoute("/app")({
   component: AppShell,
   head: () => ({
     meta: [
-      { title: "Spendly — App" },
-      { name: "description", content: "Speak it. Log it. Done." },
+      { title: "Spendly — Daily Expenses Dashboard" },
+      { name: "description", content: "Your Spendly dashboard: log today's expenses by voice or receipt scan, open the calendar to review any date, and track your daily spending streak." },
+      { property: "og:title", content: "Spendly — Daily Expenses Dashboard" },
+      { property: "og:description", content: "Log today's expenses by voice or receipt scan, review any date in the calendar, and track your daily streak." },
+      { property: "og:url", content: "https://spandly.lovable.app/app" },
     ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/app" }],
   }),
 });
 
