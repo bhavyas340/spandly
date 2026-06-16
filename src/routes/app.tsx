@@ -195,9 +195,10 @@ function AppShell() {
                   >
                     <X size={15} /> Clear all
                   </button>
+                  <div className="pointer-events-none sticky bottom-0 h-6 -mt-6 bg-gradient-to-t from-white to-transparent" />
                 </div>
-                  <div className="pointer-events-none sticky bottom-0 h-6 -mt-6 bg-gradient-to-t from-white to-transparent rounded-b-2xl" />
                 </div>
+
               </>
 
             )}
