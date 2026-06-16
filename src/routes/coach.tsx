@@ -57,7 +57,7 @@ function CoachPage() {
             <ArrowLeft size={18} />
           </Link>
           <div>
-            <h1 className="text-[20px] font-bold text-black leading-tight">🤖 Spandly Bhai</h1>
+            <h1 className="text-[20px] font-bold text-black leading-tight">Spandly Bhai — Your AI Money Coach</h1>
             <div className="text-[12px] text-black/50">Tera desi finance coach. Kuch bhi puchh.</div>
           </div>
         </div>
