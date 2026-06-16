@@ -48,7 +48,7 @@ function RoastPage() {
           <Link to="/app" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-black/70">
             <ArrowLeft size={18} />
           </Link>
-          <h1 className="text-[22px] font-bold text-black">🔥 Roast Me</h1>
+          <h1 className="text-[22px] font-bold text-black">Roast My Spending</h1>
         </div>
 
         <div
