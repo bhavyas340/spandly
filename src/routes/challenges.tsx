@@ -58,7 +58,7 @@ function ChallengesPage() {
           <Link to="/app" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-black/70">
             <ArrowLeft size={18} />
           </Link>
-          <h1 className="text-[22px] font-bold text-black">🎯 Challenges</h1>
+          <h1 className="text-[22px] font-bold text-black">Challenges</h1>
         </div>
         <div className="text-[14px] text-black/60 mb-5">Pick a challenge. Stay honest. Win bragging rights.</div>
 
