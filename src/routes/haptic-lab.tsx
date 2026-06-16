@@ -8,36 +8,49 @@ export const Route = createFileRoute("/haptic-lab")({
   head: () => ({ meta: [{ title: "Spendly — Haptic Lab" }] }),
 });
 
-type Preset = { id: string; name: string; desc: string; pattern: number | number[] };
+type Preset = { id: string; name: string; desc: string; pattern: number[] };
+const QUICK_TAP = [50];
+const DOUBLE_CONFIRM = [50, 50, 50];
+const CASH_REGISTER = [30, 20, 80, 20, 30];
+const IRON_SAVER = [100, 30, 100];
 const PRESETS: Preset[] = [
-  { id: "quick", name: "Quick Tap", desc: "One sharp tap. Clean and minimal.", pattern: 50 },
-  { id: "double", name: "Double Confirm", desc: "Tap-pause-tap. Satisfying double hit.", pattern: [50, 50, 50] },
-  { id: "register", name: "Cash Register", desc: "Old-school register feel.", pattern: [30, 20, 80, 20, 30] },
-  { id: "iron", name: "Iron Saver", desc: "Heavy premium pulse. For serious trackers.", pattern: [100, 30, 100] },
+  { id: "quick", name: "Quick Tap", desc: "One sharp tap. Clean and minimal.", pattern: QUICK_TAP },
+  { id: "double", name: "Double Confirm", desc: "Tap-pause-tap. Satisfying double hit.", pattern: DOUBLE_CONFIRM },
+  { id: "register", name: "Cash Register", desc: "Old-school register feel.", pattern: CASH_REGISTER },
+  { id: "iron", name: "Iron Saver", desc: "Heavy premium pulse. For serious trackers.", pattern: IRON_SAVER },
 ];
 
-function playFallback() {
+function triggerHaptic(pattern: number[]) {
   try {
-    const Ctx = (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
-    const ctx = new Ctx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine"; osc.frequency.value = 200;
-    gain.gain.value = 0.2;
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.start();
-    setTimeout(() => { osc.stop(); ctx.close(); }, 80);
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
   } catch {}
+  try {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (AudioCtx) {
+      const ctx = new AudioCtx();
+      if (ctx.state === "suspended") ctx.resume();
+      pattern.forEach((duration, i) => {
+        const delay = pattern.slice(0, i).reduce((a, b) => a + b, 0) / 1000;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = 800;
+        gain.gain.setValueAtTime(0.15, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration / 1000);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + duration / 1000);
+      });
+    }
+  } catch {}
+  return true;
 }
 
-function trigger(p: Preset) {
-  try {
-    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-      const ok = navigator.vibrate(p.pattern as number | number[]);
-      if (!ok) playFallback();
-    } else { playFallback(); }
-  } catch { playFallback(); }
-}
+function trigger(p: Preset) { triggerHaptic(p.pattern); }
+
 
 function HapticLab() {
   const [mounted, setMounted] = useState(false);

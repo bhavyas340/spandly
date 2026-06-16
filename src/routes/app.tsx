@@ -146,6 +146,11 @@ function AppShell() {
               <>
                 <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
                 <div className="absolute right-0 top-11 z-40 w-48 rounded-2xl bg-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] border border-black/5 overflow-hidden">
+                <div
+                  className="overflow-y-auto overscroll-contain rounded-2xl"
+                  style={{ maxHeight: "min(60vh, 420px)", WebkitOverflowScrolling: "touch" }}
+                >
+
                   <Link
                     to="/analysis"
                     onClick={() => setMenuOpen(false)}
@@ -190,8 +195,12 @@ function AppShell() {
                   >
                     <X size={15} /> Clear all
                   </button>
+                  <div className="pointer-events-none sticky bottom-0 h-6 -mt-6 bg-gradient-to-t from-white to-transparent" />
                 </div>
+                </div>
+
               </>
+
             )}
           </div>
         </div>
