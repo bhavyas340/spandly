@@ -3,7 +3,16 @@ import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/wrapped")({
   component: WrappedPage,
-  head: () => ({ meta: [{ title: "Spendly — My Wrapped" }] }),
+  head: () => ({
+    meta: [
+      { title: "My Wrapped — Your month in money | Spendly" },
+      { name: "description", content: "Your monthly spending story in one shareable card. See where your money went and what changed with Spendly Wrapped." },
+      { property: "og:title", content: "My Wrapped — Your month in money" },
+      { property: "og:description", content: "Your monthly spending story in one shareable card." },
+      { property: "og:url", content: "https://spandly.lovable.app/wrapped" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/wrapped" }],
+  }),
 });
 
 function WrappedPage() {
