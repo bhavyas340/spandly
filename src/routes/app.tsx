@@ -385,10 +385,11 @@ function BottomDock({ onVoice, onAdd, onScan }: { onVoice: () => void; onAdd: ()
 
         <button
           onClick={onVoice}
-          aria-label="Voice add"
+          aria-label="Voice add expense"
           className="flex-1 flex items-center justify-center gap-1.5 h-11"
         >
           <WaveformIcon />
+          <span className="sr-only">Voice Log</span>
         </button>
 
         <button
