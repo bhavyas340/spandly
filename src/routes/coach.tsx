@@ -4,7 +4,16 @@ import { ArrowLeft, Send } from "lucide-react";
 
 export const Route = createFileRoute("/coach")({
   component: CoachPage,
-  head: () => ({ meta: [{ title: "Spendly — Spandly Bhai" }] }),
+  head: () => ({
+    meta: [
+      { title: "Spandly Bhai — Your AI Money Coach | Spendly" },
+      { name: "description", content: "Chat with Spandly Bhai, your AI money coach in Hinglish. Get honest, practical advice on chai, Swiggy, rent and savings." },
+      { property: "og:title", content: "Spandly Bhai — Your AI Money Coach" },
+      { property: "og:description", content: "Chat with an AI money coach in Hinglish for honest, practical advice." },
+      { property: "og:url", content: "https://spandly.lovable.app/coach" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/coach" }],
+  }),
 });
 
 type Msg = { from: "bot" | "me"; text: string };
