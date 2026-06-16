@@ -305,14 +305,13 @@ function AppShell() {
 }
 
 function LiveClock() {
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
-    const tick = () => setNow(new Date());
-    tick();
-    const id = setInterval(tick, 1000 * 20);
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 1000 * 20);
     return () => clearInterval(id);
   }, []);
-  return <span>{now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>;
+  return <span suppressHydrationWarning>{now ? now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "--:--"}</span>;
 }
 
 function ExpenseCard({ e, onImage }: { e: Expense; onImage: (img: string) => void }) {
