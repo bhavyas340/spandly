@@ -84,6 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Voice-first, UPI-native expense tracker for India. Log chai, auto, lunch and QR payments in seconds. Streaks, goals, and a 9 PM shock report." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/184fe5c2-7357-4f3a-bf3b-c35877745cf9" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/184fe5c2-7357-4f3a-bf3b-c35877745cf9" },
+      { name: "google-site-verification", content: "ACKI-JQVH_zr7yM0snS8TU-mIs-LyvyYzZ9djg6kL84" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
