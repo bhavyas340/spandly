@@ -4,7 +4,16 @@ import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/roast")({
   component: RoastPage,
-  head: () => ({ meta: [{ title: "Spendly — Roast Me" }] }),
+  head: () => ({
+    meta: [
+      { title: "Roast My Spending — Honest takes on your kharcha | Spendly" },
+      { name: "description", content: "Get a brutally honest, funny roast of your monthly spending habits — and a nudge to fix them with Spendly." },
+      { property: "og:title", content: "Roast My Spending — Honest takes on your kharcha" },
+      { property: "og:description", content: "Get a brutally honest, funny roast of your spending habits." },
+      { property: "og:url", content: "https://spandly.lovable.app/roast" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/roast" }],
+  }),
 });
 
 const ROASTS = [
