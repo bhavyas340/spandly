@@ -44,16 +44,18 @@ function Landing() {
       `}</style>
 
       <Nav />
-      <Hero />
-      <TrustStrip />
-      <WhyExists />
-      <PhoneDemo />
-      <Features />
-      <Comparison />
-      <Privacy />
-      <Pricing />
-      <Testimonials />
-      <FinalCTA />
+      <main>
+        <Hero />
+        <TrustStrip />
+        <WhyExists />
+        <PhoneDemo />
+        <Features />
+        <Comparison />
+        <Privacy />
+        <Pricing />
+        <Testimonials />
+        <FinalCTA />
+      </main>
       <Footer />
     </div>
   );
