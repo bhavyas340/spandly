@@ -7,7 +7,16 @@ import { useLocalState } from "@/lib/storage";
 
 export const Route = createFileRoute("/chai-index")({
   component: ChaiIndex,
-  head: () => ({ meta: [{ title: "Spendly — Chai Index" }] }),
+  head: () => ({
+    meta: [
+      { title: "Chai Index — Compare your spending to your city | Spendly" },
+      { name: "description", content: "Benchmark your monthly spending across food, transport, and shopping against your city's averages with Spendly's Chai Index." },
+      { property: "og:title", content: "Chai Index — Compare your spending to your city" },
+      { property: "og:description", content: "See how your monthly chai, food, and transport spend compares to your city's averages." },
+      { property: "og:url", content: "https://spandly.lovable.app/chai-index" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/chai-index" }],
+  }),
 });
 
 // Anonymized city averages (₹/month per category) — illustrative benchmarks

@@ -111,7 +111,7 @@ function SnapToLog() {
 
       {image && (
         <div className="rounded-[24px] bg-white border border-black/5 overflow-hidden">
-          <img src={image} alt="receipt" className="w-full max-h-[260px] object-cover" />
+          <img src={image} alt="Captured receipt preview ready to log as an expense" className="w-full max-h-[260px] object-cover" />
           {loading && (
             <div className="p-5 text-center">
               <div className="text-[14px] font-bold text-black animate-pulse">Reading your bill…</div>

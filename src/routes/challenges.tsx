@@ -5,7 +5,16 @@ import { useLocalState } from "@/lib/storage";
 
 export const Route = createFileRoute("/challenges")({
   component: ChallengesPage,
-  head: () => ({ meta: [{ title: "Spendly — Challenges" }] }),
+  head: () => ({
+    meta: [
+      { title: "Challenges — Save more with weekly money missions | Spendly" },
+      { name: "description", content: "Take on weekly money challenges — No Swiggy Week, Ghar Wali Chai, and more — and build cheaper habits with Spendly." },
+      { property: "og:title", content: "Challenges — Save more with weekly money missions" },
+      { property: "og:description", content: "Weekly money challenges that build cheaper habits." },
+      { property: "og:url", content: "https://spandly.lovable.app/challenges" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/challenges" }],
+  }),
 });
 
 type Challenge = { id: string; emoji: string; name: string; desc: string; days: number };
@@ -49,7 +58,7 @@ function ChallengesPage() {
           <Link to="/app" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-black/70">
             <ArrowLeft size={18} />
           </Link>
-          <h1 className="text-[22px] font-bold text-black">🎯 Challenges</h1>
+          <h1 className="text-[22px] font-bold text-black">Challenges</h1>
         </div>
         <div className="text-[14px] text-black/60 mb-5">Pick a challenge. Stay honest. Win bragging rights.</div>
 
