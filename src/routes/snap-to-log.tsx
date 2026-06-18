@@ -133,17 +133,29 @@ function SnapToLog() {
         <div className="rounded-[24px] bg-white border border-black/5 overflow-hidden">
           <img src={image} alt="Captured receipt preview ready to log as an expense" className="w-full max-h-[260px] object-cover" />
           {loading && (
-            <div className="p-5 text-center">
-              <div className="text-[14px] font-bold text-black animate-pulse">Reading your bill…</div>
+            <div className="p-6 text-center">
+              <div className="mx-auto w-10 h-10 rounded-full border-4 border-black/10 border-t-black animate-spin" aria-label="Loading" />
+              <div className="text-[14px] font-bold text-black mt-3">Reading your receipt...</div>
               <div className="mt-3 h-2 rounded-full bg-black/10 overflow-hidden">
                 <div className="h-full transition-all" style={{ width: `${progress}%`, background: "#1D9E75" }} />
               </div>
               <div className="text-[11px] text-black/40 mt-1">{progress}%</div>
             </div>
           )}
-          {draft && !loading && (
+          {failed && !loading && (
+            <div className="p-5 text-center">
+              <div className="text-[28px]">😕</div>
+              <div className="text-[14px] font-bold text-black mt-1">Couldn't read this one</div>
+              <div className="text-[12px] text-black/60 mt-1">Try better lighting or type it in.</div>
+              <div className="flex gap-2 pt-4">
+                <button onClick={() => { setImage(null); setFailed(false); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px] inline-flex items-center justify-center gap-1"><RefreshCw size={14}/> Retake</button>
+                <button onClick={() => openManual()} className="flex-1 h-11 rounded-full bg-black text-white font-bold text-[13px]">Type manually</button>
+              </div>
+            </div>
+          )}
+          {draft && !loading && !failed && (
             <div className="p-5 space-y-3">
-              <SectionTitle>Confirm details</SectionTitle>
+              <SectionTitle>{manualOpen ? "Add expense" : "Confirm details"}</SectionTitle>
               <Field label="Merchant" value={draft.merchant} onChange={(v) => setDraft({ ...draft, merchant: v, ...categorize(v) })} />
               <Field label="Amount (₹)" value={String(draft.amount)} onChange={(v) => setDraft({ ...draft, amount: Number(v) || 0 })} />
               <Field label="Date" value={draft.date} onChange={(v) => setDraft({ ...draft, date: v })} />
@@ -152,7 +164,7 @@ function SnapToLog() {
                 <span className="px-2.5 py-1 rounded-full text-white font-bold text-[11px]" style={{ background: "#1D9E75" }}>{draft.emoji} {draft.category}</span>
               </div>
               <div className="flex gap-2 pt-2">
-                <button onClick={() => { setImage(null); setDraft(null); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px] inline-flex items-center justify-center gap-1"><RefreshCw size={14}/> Retake</button>
+                <button onClick={() => { setImage(null); setDraft(null); setManualOpen(false); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px] inline-flex items-center justify-center gap-1"><RefreshCw size={14}/> Retake</button>
                 <button onClick={confirm} className="flex-1 h-11 rounded-full bg-black text-white font-bold text-[13px] inline-flex items-center justify-center gap-1"><Check size={14}/> Confirm & Log</button>
               </div>
             </div>
@@ -165,9 +177,31 @@ function SnapToLog() {
         1. Snap the receipt → 2. OCR extracts merchant + total → 3. Auto-categorize by merchant → 4. One-tap confirm.
       </div>
 
+      {justLogged && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+          <div
+            className="bg-white rounded-3xl shadow-2xl px-8 py-6 flex flex-col items-center gap-2 border border-black/5"
+            style={{ animation: "snapLoggedPop 0.4s ease-out" }}
+          >
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center text-white"
+              style={{ background: "#1D9E75", animation: "snapCheckIn 0.5s ease-out" }}
+            >
+              <Check size={36} strokeWidth={3} />
+            </div>
+            <div className="text-[18px] font-bold text-black">Logged!</div>
+          </div>
+          <style>{`
+            @keyframes snapLoggedPop { 0%{transform:scale(.7);opacity:0} 100%{transform:scale(1);opacity:1} }
+            @keyframes snapCheckIn { 0%{transform:scale(0) rotate(-45deg)} 60%{transform:scale(1.15) rotate(0deg)} 100%{transform:scale(1)} }
+          `}</style>
+        </div>
+      )}
+
       {toast && <Toast text={toast} />}
     </Shell>
   );
+
 }
 
 function Field({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
