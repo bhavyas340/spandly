@@ -14,6 +14,31 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useLocalState, fileToDataUrl } from "@/lib/storage";
+import { getStreak, getExpenses, getMonthExpenses } from "@/lib/spandlyStorage";
+
+function StreakXpBadge() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  const streak = getStreak();
+  const exp = getExpenses();
+  const now = new Date();
+  const monthExp = getMonthExpenses(now.getMonth(), now.getFullYear());
+  const monthTotal = monthExp.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const xp = exp.length * 10 + streak * 50 + Math.floor(monthTotal / 100);
+  const lvl = xp < 500 ? 1 : xp < 2000 ? 2 : xp < 5000 ? 3 : 4;
+  return (
+    <Link
+      to="/xp"
+      className="inline-flex items-center gap-2 h-7 px-3 rounded-full bg-white/70 backdrop-blur shadow-sm border border-black/5 text-[11px] font-bold text-black/80"
+      aria-label={`Streak ${streak} days, XP ${xp}`}
+    >
+      <span>🔥 {streak}</span>
+      <span className="text-black/20">·</span>
+      <span>⚡ Lvl {lvl} · {xp} XP</span>
+    </Link>
+  );
+}
 
 export const Route = createFileRoute("/app")({
   component: AppShell,
