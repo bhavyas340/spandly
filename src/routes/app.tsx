@@ -233,7 +233,8 @@ function AppShell() {
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-[14px] bg-black text-white flex items-center justify-center shrink-0 shadow-sm">
                 <CalendarIcon size={18} />
-              </div>
+        </div>
+        <div className="px-6 pb-3"><StreakXpBadge /></div>
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">{dayName}</div>
                 <div className="text-[18px] font-bold text-black leading-tight">{dateStr}</div>
