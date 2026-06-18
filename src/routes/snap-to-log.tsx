@@ -55,12 +55,15 @@ function SnapToLog() {
   const [progress, setProgress] = useState(0);
   const [draft, setDraft] = useState<{ merchant: string; amount: number; date: string; category: string; emoji: string } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
+  const [justLogged, setJustLogged] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onFile = async (file: File) => {
     const url = await fileToDataUrl(file);
     setImage(url);
-    setLoading(true); setProgress(0); setDraft(null);
+    setLoading(true); setProgress(0); setDraft(null); setFailed(false);
     try {
       const { default: Tesseract } = await import("tesseract.js");
       const res = await Tesseract.recognize(url, "eng", {
@@ -68,21 +71,36 @@ function SnapToLog() {
           if (m.status === "recognizing text") setProgress(Math.round(m.progress * 100));
         },
       });
-      const parsed = parseReceipt(res.data.text || "");
-      const cat = categorize(parsed.merchant);
-      setDraft({ ...parsed, ...cat });
+      const text = res.data.text || "";
+      const parsed = parseReceipt(text);
+      if (!text.trim() || (!parsed.amount && parsed.merchant === "Unknown")) {
+        setFailed(true);
+      } else {
+        const cat = categorize(parsed.merchant);
+        setDraft({ ...parsed, ...cat });
+      }
     } catch {
-      setDraft({ merchant: "Unknown", amount: 0, date: new Date().toLocaleDateString(), category: "Other", emoji: "💸" });
-      setToast("Couldn't read clearly — please edit");
-      setTimeout(() => setToast(null), 2000);
+      setFailed(true);
     } finally { setLoading(false); }
+  };
+
+  const openManual = (prefill?: { merchant: string; amount: number }) => {
+    setFailed(false);
+    setDraft({
+      merchant: prefill?.merchant || "",
+      amount: prefill?.amount || 0,
+      date: new Date().toLocaleDateString(),
+      category: "Other",
+      emoji: "💸",
+    });
+    setManualOpen(true);
   };
 
   const confirm = () => {
     if (!draft) return;
     const newExp: Expense = {
       id: Date.now(),
-      label: draft.merchant,
+      label: draft.merchant || "Expense",
       category: draft.category,
       amount: draft.amount,
       emoji: draft.emoji,
@@ -90,9 +108,11 @@ function SnapToLog() {
       image: image || undefined,
     };
     setExpenses((prev) => [newExp, ...prev]);
-    setToast("Logged! ✓"); setTimeout(() => setToast(null), 1600);
-    setImage(null); setDraft(null);
+    setJustLogged(true);
+    setTimeout(() => setJustLogged(false), 1600);
+    setImage(null); setDraft(null); setManualOpen(false);
   };
+
 
   return (
     <Shell title="📸 Snap to Log">
