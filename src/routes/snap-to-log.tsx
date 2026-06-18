@@ -118,7 +118,7 @@ function SnapToLog() {
     <Shell title="📸 Snap to Log">
       <input ref={inputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
 
-      {!image && (
+      {!image && !manualOpen && (
         <div className="rounded-[24px] bg-white border-2 p-6 text-center shadow-sm" style={{ borderColor: "#1D9E75" }}>
           <div className="text-[44px] mb-2">🧾</div>
           <div className="text-[18px] font-bold text-black">Snap your bill</div>
@@ -126,8 +126,25 @@ function SnapToLog() {
           <button onClick={() => inputRef.current?.click()} className="mt-5 w-full h-12 rounded-full bg-black text-white font-bold text-[14px] inline-flex items-center justify-center gap-2">
             <Camera size={16} /> Open Camera
           </button>
+          <button onClick={() => openManual()} className="mt-2 w-full h-11 rounded-full bg-white text-black font-bold text-[13px] border border-black/15">
+            Type manually
+          </button>
         </div>
       )}
+
+      {!image && manualOpen && draft && (
+        <div className="rounded-[24px] bg-white border border-black/5 p-5 space-y-3">
+          <SectionTitle>Add expense</SectionTitle>
+          <Field label="Merchant" value={draft.merchant} onChange={(v) => setDraft({ ...draft, merchant: v, ...categorize(v) })} />
+          <Field label="Amount (₹)" value={String(draft.amount)} onChange={(v) => setDraft({ ...draft, amount: Number(v) || 0 })} />
+          <Field label="Date" value={draft.date} onChange={(v) => setDraft({ ...draft, date: v })} />
+          <div className="flex gap-2 pt-2">
+            <button onClick={() => { setDraft(null); setManualOpen(false); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px]">Cancel</button>
+            <button onClick={confirm} className="flex-1 h-11 rounded-full bg-black text-white font-bold text-[13px] inline-flex items-center justify-center gap-1"><Check size={14}/> Log expense</button>
+          </div>
+        </div>
+      )}
+
 
       {image && (
         <div className="rounded-[24px] bg-white border border-black/5 overflow-hidden">
