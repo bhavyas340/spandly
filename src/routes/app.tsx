@@ -151,7 +151,7 @@ function AppShell() {
         </div>
 
         {/* Header */}
-        <div className="px-6 pt-2 pb-4 flex items-center justify-between">
+        <div className="px-6 pt-2 pb-2 flex items-center justify-between">
           <h1 className="text-[34px] leading-none font-bold tracking-tight text-black">Spendly — Daily Expenses</h1>
           <div className="flex items-center gap-2 relative">
             <Link
