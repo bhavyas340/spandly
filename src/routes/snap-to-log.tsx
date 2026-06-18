@@ -215,7 +215,7 @@ function SnapToLog() {
         </div>
       )}
 
-      {toast && <Toast text={toast} />}
+      
     </Shell>
   );
 
