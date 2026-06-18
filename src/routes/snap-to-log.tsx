@@ -54,7 +54,7 @@ function SnapToLog() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [draft, setDraft] = useState<{ merchant: string; amount: number; date: string; category: string; emoji: string } | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  // toast removed — using justLogged overlay instead
   const [failed, setFailed] = useState(false);
   const [manualOpen, setManualOpen] = useState(false);
   const [justLogged, setJustLogged] = useState(false);
