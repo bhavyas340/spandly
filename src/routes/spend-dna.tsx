@@ -77,7 +77,14 @@ function SpendDna() {
   return (
     <Shell title="✦ Spend DNA">
       {empty ? (
-        <EmptyCard text="Log your first expense on the main app to unlock your Spend DNA." cta />
+        <div className="rounded-[24px] bg-white border-2 p-8 text-center shadow-sm" style={{ borderColor: "#1D9E75" }}>
+          <div className="text-[56px] leading-none mb-3" aria-hidden>🧬</div>
+          <div className="text-[16px] font-bold text-black">Your Spend DNA builds over 7 days of logging</div>
+          <div className="text-[13px] text-black/60 mt-2">Once you log expenses, your unique money personality unlocks.</div>
+          <Link to="/app" className="inline-block mt-5 h-11 px-6 leading-[44px] rounded-full bg-black text-white text-[13px] font-bold">
+            Log your first expense →
+          </Link>
+        </div>
       ) : (
         <div className="rounded-[24px] bg-white border-2 p-5 shadow-sm" style={{ borderColor: "#1D9E75" }}>
           <div className="text-[11px] uppercase tracking-wider font-semibold text-black/40">Your Spend DNA</div>
