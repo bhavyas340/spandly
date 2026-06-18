@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { Camera, Check, RefreshCw } from "lucide-react";
-import { Shell, SectionTitle, Toast } from "./spend-dna";
+import { Shell, SectionTitle } from "./spend-dna";
 import { useLocalState, fileToDataUrl } from "@/lib/storage";
 
 export const Route = createFileRoute("/snap-to-log")({
