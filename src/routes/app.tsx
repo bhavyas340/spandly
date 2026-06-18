@@ -14,6 +14,31 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useLocalState, fileToDataUrl } from "@/lib/storage";
+import { getStreak, getExpenses, getMonthExpenses } from "@/lib/spandlyStorage";
+
+function StreakXpBadge() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  const streak = getStreak();
+  const exp = getExpenses();
+  const now = new Date();
+  const monthExp = getMonthExpenses(now.getMonth(), now.getFullYear());
+  const monthTotal = monthExp.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const xp = exp.length * 10 + streak * 50 + Math.floor(monthTotal / 100);
+  const lvl = xp < 500 ? 1 : xp < 2000 ? 2 : xp < 5000 ? 3 : 4;
+  return (
+    <Link
+      to="/xp"
+      className="inline-flex items-center gap-2 h-7 px-3 rounded-full bg-white/70 backdrop-blur shadow-sm border border-black/5 text-[11px] font-bold text-black/80"
+      aria-label={`Streak ${streak} days, XP ${xp}`}
+    >
+      <span>🔥 {streak}</span>
+      <span className="text-black/20">·</span>
+      <span>⚡ Lvl {lvl} · {xp} XP</span>
+    </Link>
+  );
+}
 
 export const Route = createFileRoute("/app")({
   component: AppShell,
@@ -126,7 +151,7 @@ function AppShell() {
         </div>
 
         {/* Header */}
-        <div className="px-6 pt-2 pb-4 flex items-center justify-between">
+        <div className="px-6 pt-2 pb-2 flex items-center justify-between">
           <h1 className="text-[34px] leading-none font-bold tracking-tight text-black">Spendly — Daily Expenses</h1>
           <div className="flex items-center gap-2 relative">
             <Link
@@ -164,20 +189,13 @@ function AppShell() {
                   <Link to="/city-pulse" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🏙️</span> City Pulse</Link>
                   <Link to="/month-forecast" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>📅</span> Month Forecast</Link>
                   <Link to="/kharcha-report" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>📄</span> Kharcha Report</Link>
-                  <Link to="/haptic-lab" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>💥</span> Haptic Lab</Link>
-                  <Link to="/icon-status" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🔥</span> App Icon</Link>
                   <div className="h-px bg-black/5" />
                   <Link to="/snap-to-log" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>📸</span> Snap to Log</Link>
-                  <Link to="/whatsapp-share" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>💬</span> Share on WhatsApp</Link>
-                  <Link to="/xp" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>⚡</span> XP & Levels</Link>
                   <Link to="/chai-index" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>🍛</span> Chai Index</Link>
                   <Link to="/subscriptions" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5"><span>💳</span> Subscriptions</Link>
                   <div className="h-px bg-black/5" />
                   <Link to="/roast" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
                     <span>🔥</span> Roast Me
-                  </Link>
-                  <Link to="/squad" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
-                    <span>⚔️</span> Squad Battle
                   </Link>
                   <Link to="/wrapped" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-3 text-[13px] font-semibold text-black hover:bg-black/5">
                     <span>📊</span> My Wrapped
@@ -215,7 +233,8 @@ function AppShell() {
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-[14px] bg-black text-white flex items-center justify-center shrink-0 shadow-sm">
                 <CalendarIcon size={18} />
-              </div>
+        </div>
+        <div className="px-6 pb-3"><StreakXpBadge /></div>
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-wider text-black/40">{dayName}</div>
                 <div className="text-[18px] font-bold text-black leading-tight">{dateStr}</div>

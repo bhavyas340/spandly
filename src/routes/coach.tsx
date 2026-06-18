@@ -18,14 +18,39 @@ export const Route = createFileRoute("/coach")({
 
 type Msg = { from: "bot" | "me"; text: string };
 
-function reply(input: string): string {
-  const t = input.toLowerCase();
-  if (/(swiggy|zomato|food)/.test(t)) return "Bhai, ghar ka khana try kar. ₹200 roz bachega. Month mein ₹6000! 🍱";
-  if (/(chai|coffee)/.test(t)) return "Chai pe itna? Ek thermos kharid le ek baar mein. ₹15 mein 3 cups ☕";
-  if (/(auto|cab|ola|uber)/.test(t)) return "Cycling try kar yaar. Free hai, fit bhi rahega. 🚴";
-  if (/(saving|bachana|save)/.test(t)) return "Simple rule: pehle 20% bachao, baad mein kharch karo. Seedha laga do SIP mein 📈";
-  if (/(salary|paisa|money)/.test(t)) return "Paisa toh aata rahega bhai. Agar kharch control ho gaya toh stress zero ✌️";
-  return "Samajh gaya bhai. Aur kuch batao, main yahan hoon 😄";
+const SYSTEM_PROMPT =
+  "You are Spandly Bhai, a friendly and witty Indian AI money coach for the Spendly expense app. You help users understand their spending, give practical saving tips in Hinglish-friendly language, and cheer them on. Keep responses under 3 sentences. Be warm, direct, and occasionally funny like a helpful older sibling.";
+
+async function askGemini(history: Msg[], userText: string): Promise<string> {
+  const key = (import.meta as { env: Record<string, string | undefined> }).env.VITE_GEMINI_API_KEY;
+  if (!key) {
+    return "Spandly Bhai is waking up... add your Gemini API key in settings.";
+  }
+  const contents = [
+    ...history.map((m) => ({
+      role: m.from === "me" ? "user" : "model",
+      parts: [{ text: m.text }],
+    })),
+    { role: "user", parts: [{ text: userText }] },
+  ];
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents,
+        generationConfig: { temperature: 0.9, maxOutputTokens: 200 },
+      }),
+    }
+  );
+  if (!res.ok) {
+    throw new Error(`Gemini ${res.status}`);
+  }
+  const data = await res.json();
+  const text: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  return text?.trim() || "Hmm, kuch samjha nahi. Phir se bol bhai? 🤔";
 }
 
 function CoachPage() {
@@ -33,20 +58,31 @@ function CoachPage() {
     { from: "bot", text: "Bol bhai, kya scene hai? Paise bachane hain ya sirf roona hai? 😄" },
   ]);
   const [input, setInput] = useState("");
+  const [typing, setTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [msgs]);
+  }, [msgs, typing]);
 
-  const send = () => {
+  const send = async () => {
     const text = input.trim();
-    if (!text) return;
+    if (!text || typing) return;
     setInput("");
+    const history = msgs;
     setMsgs((m) => [...m, { from: "me", text }]);
-    setTimeout(() => {
-      setMsgs((m) => [...m, { from: "bot", text: reply(text) }]);
-    }, 450);
+    setTyping(true);
+    try {
+      const reply = await askGemini(history, text);
+      setMsgs((m) => [...m, { from: "bot", text: reply }]);
+    } catch {
+      setMsgs((m) => [
+        ...m,
+        { from: "bot", text: "Network glitch ho gaya bhai, ek baar aur try kar 🙏" },
+      ]);
+    } finally {
+      setTyping(false);
+    }
   };
 
   return (
@@ -81,6 +117,19 @@ function CoachPage() {
               </div>
             </div>
           ))}
+          {typing && (
+            <div className="flex justify-start">
+              <div
+                className="px-4 py-3 rounded-[20px] rounded-bl-md shadow-sm border border-black/5 inline-flex items-center gap-1"
+                style={{ background: "linear-gradient(160deg,#FFFFFF 0%,#FFE9D6 100%)" }}
+                aria-label="Spandly Bhai is typing"
+              >
+                <Dot delay="0s" />
+                <Dot delay="0.15s" />
+                <Dot delay="0.3s" />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="px-4 pb-6 pt-3">
@@ -94,7 +143,7 @@ function CoachPage() {
             />
             <button
               onClick={send}
-              disabled={!input.trim()}
+              disabled={!input.trim() || typing}
               className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center disabled:opacity-30"
             >
               <Send size={16} />
@@ -103,5 +152,16 @@ function CoachPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function Dot({ delay }: { delay: string }) {
+  return (
+    <span
+      className="w-1.5 h-1.5 rounded-full bg-black/40 inline-block"
+      style={{ animation: "spandlyBhaiDot 1.2s infinite ease-in-out", animationDelay: delay }}
+    >
+      <style>{`@keyframes spandlyBhaiDot { 0%,80%,100%{transform:translateY(0);opacity:.3} 40%{transform:translateY(-3px);opacity:1} }`}</style>
+    </span>
   );
 }

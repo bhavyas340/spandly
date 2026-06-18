@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { Camera, Check, RefreshCw } from "lucide-react";
-import { Shell, SectionTitle, Toast } from "./spend-dna";
+import { Shell, SectionTitle } from "./spend-dna";
 import { useLocalState, fileToDataUrl } from "@/lib/storage";
 
 export const Route = createFileRoute("/snap-to-log")({
@@ -54,13 +54,16 @@ function SnapToLog() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [draft, setDraft] = useState<{ merchant: string; amount: number; date: string; category: string; emoji: string } | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  // toast removed — using justLogged overlay instead
+  const [failed, setFailed] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
+  const [justLogged, setJustLogged] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onFile = async (file: File) => {
     const url = await fileToDataUrl(file);
     setImage(url);
-    setLoading(true); setProgress(0); setDraft(null);
+    setLoading(true); setProgress(0); setDraft(null); setFailed(false);
     try {
       const { default: Tesseract } = await import("tesseract.js");
       const res = await Tesseract.recognize(url, "eng", {
@@ -68,21 +71,36 @@ function SnapToLog() {
           if (m.status === "recognizing text") setProgress(Math.round(m.progress * 100));
         },
       });
-      const parsed = parseReceipt(res.data.text || "");
-      const cat = categorize(parsed.merchant);
-      setDraft({ ...parsed, ...cat });
+      const text = res.data.text || "";
+      const parsed = parseReceipt(text);
+      if (!text.trim() || (!parsed.amount && parsed.merchant === "Unknown")) {
+        setFailed(true);
+      } else {
+        const cat = categorize(parsed.merchant);
+        setDraft({ ...parsed, ...cat });
+      }
     } catch {
-      setDraft({ merchant: "Unknown", amount: 0, date: new Date().toLocaleDateString(), category: "Other", emoji: "💸" });
-      setToast("Couldn't read clearly — please edit");
-      setTimeout(() => setToast(null), 2000);
+      setFailed(true);
     } finally { setLoading(false); }
+  };
+
+  const openManual = (prefill?: { merchant: string; amount: number }) => {
+    setFailed(false);
+    setDraft({
+      merchant: prefill?.merchant || "",
+      amount: prefill?.amount || 0,
+      date: new Date().toLocaleDateString(),
+      category: "Other",
+      emoji: "💸",
+    });
+    setManualOpen(true);
   };
 
   const confirm = () => {
     if (!draft) return;
     const newExp: Expense = {
       id: Date.now(),
-      label: draft.merchant,
+      label: draft.merchant || "Expense",
       category: draft.category,
       amount: draft.amount,
       emoji: draft.emoji,
@@ -90,15 +108,17 @@ function SnapToLog() {
       image: image || undefined,
     };
     setExpenses((prev) => [newExp, ...prev]);
-    setToast("Logged! ✓"); setTimeout(() => setToast(null), 1600);
-    setImage(null); setDraft(null);
+    setJustLogged(true);
+    setTimeout(() => setJustLogged(false), 1600);
+    setImage(null); setDraft(null); setManualOpen(false);
   };
+
 
   return (
     <Shell title="📸 Snap to Log">
       <input ref={inputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
 
-      {!image && (
+      {!image && !manualOpen && (
         <div className="rounded-[24px] bg-white border-2 p-6 text-center shadow-sm" style={{ borderColor: "#1D9E75" }}>
           <div className="text-[44px] mb-2">🧾</div>
           <div className="text-[18px] font-bold text-black">Snap your bill</div>
@@ -106,24 +126,53 @@ function SnapToLog() {
           <button onClick={() => inputRef.current?.click()} className="mt-5 w-full h-12 rounded-full bg-black text-white font-bold text-[14px] inline-flex items-center justify-center gap-2">
             <Camera size={16} /> Open Camera
           </button>
+          <button onClick={() => openManual()} className="mt-2 w-full h-11 rounded-full bg-white text-black font-bold text-[13px] border border-black/15">
+            Type manually
+          </button>
         </div>
       )}
+
+      {!image && manualOpen && draft && (
+        <div className="rounded-[24px] bg-white border border-black/5 p-5 space-y-3">
+          <SectionTitle>Add expense</SectionTitle>
+          <Field label="Merchant" value={draft.merchant} onChange={(v) => setDraft({ ...draft, merchant: v, ...categorize(v) })} />
+          <Field label="Amount (₹)" value={String(draft.amount)} onChange={(v) => setDraft({ ...draft, amount: Number(v) || 0 })} />
+          <Field label="Date" value={draft.date} onChange={(v) => setDraft({ ...draft, date: v })} />
+          <div className="flex gap-2 pt-2">
+            <button onClick={() => { setDraft(null); setManualOpen(false); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px]">Cancel</button>
+            <button onClick={confirm} className="flex-1 h-11 rounded-full bg-black text-white font-bold text-[13px] inline-flex items-center justify-center gap-1"><Check size={14}/> Log expense</button>
+          </div>
+        </div>
+      )}
+
 
       {image && (
         <div className="rounded-[24px] bg-white border border-black/5 overflow-hidden">
           <img src={image} alt="Captured receipt preview ready to log as an expense" className="w-full max-h-[260px] object-cover" />
           {loading && (
-            <div className="p-5 text-center">
-              <div className="text-[14px] font-bold text-black animate-pulse">Reading your bill…</div>
+            <div className="p-6 text-center">
+              <div className="mx-auto w-10 h-10 rounded-full border-4 border-black/10 border-t-black animate-spin" aria-label="Loading" />
+              <div className="text-[14px] font-bold text-black mt-3">Reading your receipt...</div>
               <div className="mt-3 h-2 rounded-full bg-black/10 overflow-hidden">
                 <div className="h-full transition-all" style={{ width: `${progress}%`, background: "#1D9E75" }} />
               </div>
               <div className="text-[11px] text-black/40 mt-1">{progress}%</div>
             </div>
           )}
-          {draft && !loading && (
+          {failed && !loading && (
+            <div className="p-5 text-center">
+              <div className="text-[28px]">😕</div>
+              <div className="text-[14px] font-bold text-black mt-1">Couldn't read this one</div>
+              <div className="text-[12px] text-black/60 mt-1">Try better lighting or type it in.</div>
+              <div className="flex gap-2 pt-4">
+                <button onClick={() => { setImage(null); setFailed(false); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px] inline-flex items-center justify-center gap-1"><RefreshCw size={14}/> Retake</button>
+                <button onClick={() => openManual()} className="flex-1 h-11 rounded-full bg-black text-white font-bold text-[13px]">Type manually</button>
+              </div>
+            </div>
+          )}
+          {draft && !loading && !failed && (
             <div className="p-5 space-y-3">
-              <SectionTitle>Confirm details</SectionTitle>
+              <SectionTitle>{manualOpen ? "Add expense" : "Confirm details"}</SectionTitle>
               <Field label="Merchant" value={draft.merchant} onChange={(v) => setDraft({ ...draft, merchant: v, ...categorize(v) })} />
               <Field label="Amount (₹)" value={String(draft.amount)} onChange={(v) => setDraft({ ...draft, amount: Number(v) || 0 })} />
               <Field label="Date" value={draft.date} onChange={(v) => setDraft({ ...draft, date: v })} />
@@ -132,7 +181,7 @@ function SnapToLog() {
                 <span className="px-2.5 py-1 rounded-full text-white font-bold text-[11px]" style={{ background: "#1D9E75" }}>{draft.emoji} {draft.category}</span>
               </div>
               <div className="flex gap-2 pt-2">
-                <button onClick={() => { setImage(null); setDraft(null); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px] inline-flex items-center justify-center gap-1"><RefreshCw size={14}/> Retake</button>
+                <button onClick={() => { setImage(null); setDraft(null); setManualOpen(false); }} className="flex-1 h-11 rounded-full border border-black/15 font-bold text-[13px] inline-flex items-center justify-center gap-1"><RefreshCw size={14}/> Retake</button>
                 <button onClick={confirm} className="flex-1 h-11 rounded-full bg-black text-white font-bold text-[13px] inline-flex items-center justify-center gap-1"><Check size={14}/> Confirm & Log</button>
               </div>
             </div>
@@ -145,9 +194,31 @@ function SnapToLog() {
         1. Snap the receipt → 2. OCR extracts merchant + total → 3. Auto-categorize by merchant → 4. One-tap confirm.
       </div>
 
-      {toast && <Toast text={toast} />}
+      {justLogged && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+          <div
+            className="bg-white rounded-3xl shadow-2xl px-8 py-6 flex flex-col items-center gap-2 border border-black/5"
+            style={{ animation: "snapLoggedPop 0.4s ease-out" }}
+          >
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center text-white"
+              style={{ background: "#1D9E75", animation: "snapCheckIn 0.5s ease-out" }}
+            >
+              <Check size={36} strokeWidth={3} />
+            </div>
+            <div className="text-[18px] font-bold text-black">Logged!</div>
+          </div>
+          <style>{`
+            @keyframes snapLoggedPop { 0%{transform:scale(.7);opacity:0} 100%{transform:scale(1);opacity:1} }
+            @keyframes snapCheckIn { 0%{transform:scale(0) rotate(-45deg)} 60%{transform:scale(1.15) rotate(0deg)} 100%{transform:scale(1)} }
+          `}</style>
+        </div>
+      )}
+
+      
     </Shell>
   );
+
 }
 
 function Field({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
