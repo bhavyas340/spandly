@@ -20,6 +20,7 @@ import { Route as SnapToLogRouteImport } from './routes/snap-to-log'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoastRouteImport } from './routes/roast'
 import { Route as MonthForecastRouteImport } from './routes/month-forecast'
+import { Route as MoneyPersonaRouteImport } from './routes/money-persona'
 import { Route as KharchaReportRouteImport } from './routes/kharcha-report'
 import { Route as IconStatusRouteImport } from './routes/icon-status'
 import { Route as HapticLabRouteImport } from './routes/haptic-lab'
@@ -85,6 +86,11 @@ const RoastRoute = RoastRouteImport.update({
 const MonthForecastRoute = MonthForecastRouteImport.update({
   id: '/month-forecast',
   path: '/month-forecast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoneyPersonaRoute = MoneyPersonaRouteImport.update({
+  id: '/money-persona',
+  path: '/money-persona',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KharchaReportRoute = KharchaReportRouteImport.update({
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/haptic-lab': typeof HapticLabRoute
   '/icon-status': typeof IconStatusRoute
   '/kharcha-report': typeof KharchaReportRoute
+  '/money-persona': typeof MoneyPersonaRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   '/haptic-lab': typeof HapticLabRoute
   '/icon-status': typeof IconStatusRoute
   '/kharcha-report': typeof KharchaReportRoute
+  '/money-persona': typeof MoneyPersonaRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/haptic-lab': typeof HapticLabRoute
   '/icon-status': typeof IconStatusRoute
   '/kharcha-report': typeof KharchaReportRoute
+  '/money-persona': typeof MoneyPersonaRoute
   '/month-forecast': typeof MonthForecastRoute
   '/roast': typeof RoastRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/haptic-lab'
     | '/icon-status'
     | '/kharcha-report'
+    | '/money-persona'
     | '/month-forecast'
     | '/roast'
     | '/sitemap.xml'
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/haptic-lab'
     | '/icon-status'
     | '/kharcha-report'
+    | '/money-persona'
     | '/month-forecast'
     | '/roast'
     | '/sitemap.xml'
@@ -278,6 +289,7 @@ export interface FileRouteTypes {
     | '/haptic-lab'
     | '/icon-status'
     | '/kharcha-report'
+    | '/money-persona'
     | '/month-forecast'
     | '/roast'
     | '/sitemap.xml'
@@ -303,6 +315,7 @@ export interface RootRouteChildren {
   HapticLabRoute: typeof HapticLabRoute
   IconStatusRoute: typeof IconStatusRoute
   KharchaReportRoute: typeof KharchaReportRoute
+  MoneyPersonaRoute: typeof MoneyPersonaRoute
   MonthForecastRoute: typeof MonthForecastRoute
   RoastRoute: typeof RoastRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -393,6 +406,13 @@ declare module '@tanstack/react-router' {
       path: '/month-forecast'
       fullPath: '/month-forecast'
       preLoaderRoute: typeof MonthForecastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/money-persona': {
+      id: '/money-persona'
+      path: '/money-persona'
+      fullPath: '/money-persona'
+      preLoaderRoute: typeof MoneyPersonaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kharcha-report': {
@@ -487,6 +507,7 @@ const rootRouteChildren: RootRouteChildren = {
   HapticLabRoute: HapticLabRoute,
   IconStatusRoute: IconStatusRoute,
   KharchaReportRoute: KharchaReportRoute,
+  MoneyPersonaRoute: MoneyPersonaRoute,
   MonthForecastRoute: MonthForecastRoute,
   RoastRoute: RoastRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
