@@ -72,6 +72,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#0F172A" },
       { title: "Spendly — Your daily expenses, tracked in 3 seconds" },
       { name: "description", content: "Voice-first, UPI-native expense tracker for India. Log chai, auto, lunch and QR payments in seconds. Streaks, goals, 9 PM report." },
       { name: "author", content: "Spendly" },
@@ -88,6 +89,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" },
@@ -102,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               "@type": "Organization",
               name: "Spendly",
               url: "https://spandly.lovable.app/",
-              logo: "https://spandly.lovable.app/favicon.ico",
+              logo: "https://spandly.lovable.app/icon-192.png",
             },
             {
               "@type": "WebSite",
