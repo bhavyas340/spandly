@@ -5,7 +5,16 @@ import { getStreak } from "@/lib/spandlyStorage";
 
 export const Route = createFileRoute("/streak-legacy")({
   component: StreakLegacy,
-  head: () => ({ meta: [{ title: "Spendly — Streak Legacy" }] }),
+  head: () => ({
+    meta: [
+      { title: "Streak Legacy — Monuments for every milestone | Spendly" },
+      { name: "description", content: "Build a monument for every logging streak milestone — 7, 30, 100 and 365 days — and unlock rewards along the way with Spendly." },
+      { property: "og:title", content: "Streak Legacy — Monuments for every milestone" },
+      { property: "og:description", content: "Monuments and rewards for 7, 30, 100 and 365-day logging streaks." },
+      { property: "og:url", content: "https://spandly.lovable.app/streak-legacy" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/streak-legacy" }],
+  }),
 });
 
 const MILESTONES = [7, 14, 30, 60, 100, 200, 365];
