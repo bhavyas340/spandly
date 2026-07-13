@@ -6,7 +6,16 @@ import { useLocalState } from "@/lib/storage";
 
 export const Route = createFileRoute("/subscriptions")({
   component: Subscriptions,
-  head: () => ({ meta: [{ title: "Spendly — Subscriptions" }] }),
+  head: () => ({
+    meta: [
+      { title: "Subscriptions — Track OTT and app renewals | Spendly" },
+      { name: "description", content: "Track Netflix, Spotify, Hotstar, Prime and other recurring subscriptions in one place. Get cancel reminders before renewal with Spendly." },
+      { property: "og:title", content: "Subscriptions — Track OTT and app renewals" },
+      { property: "og:description", content: "One place for Netflix, Spotify, Hotstar and every recurring charge, with cancel reminders." },
+      { property: "og:url", content: "https://spandly.lovable.app/subscriptions" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/subscriptions" }],
+  }),
 });
 
 type Sub = { id: number; name: string; amount: number; nextDebit: string; frequency: "Monthly" | "Yearly" | "Weekly"; color: string; emoji: string };
