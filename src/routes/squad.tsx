@@ -4,7 +4,16 @@ import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/squad")({
   component: SquadPage,
-  head: () => ({ meta: [{ title: "Spendly — Squad Battle" }] }),
+  head: () => ({
+    meta: [
+      { title: "Squad Battle — Track spending with friends | Spendly" },
+      { name: "description", content: "Invite friends into a Squad Battle and see who saves more each week. A friendly kanjoos leaderboard, powered by Spendly." },
+      { property: "og:title", content: "Squad Battle — Track spending with friends" },
+      { property: "og:description", content: "A friendly weekly savings leaderboard with your friends." },
+      { property: "og:url", content: "https://spandly.lovable.app/squad" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/squad" }],
+  }),
 });
 
 const SHARE_TEXT =
