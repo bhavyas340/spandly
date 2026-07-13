@@ -160,7 +160,7 @@ export function Shell({ title, children, right }: { title: string; children: Rea
 }
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <div className="text-[11px] uppercase tracking-wider font-semibold text-black/50 mt-2">{children}</div>;
+  return <h2 className="text-[11px] uppercase tracking-wider font-semibold text-black/50 mt-2">{children}</h2>;
 }
 
 export function EmptyCard({ text, cta }: { text: string; cta?: boolean }) {
