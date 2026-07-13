@@ -6,7 +6,16 @@ import { getExpenses, getStreak, getMonthExpenses } from "@/lib/spandlyStorage";
 
 export const Route = createFileRoute("/xp")({
   component: XPPage,
-  head: () => ({ meta: [{ title: "Spendly — XP & Levels" }] }),
+  head: () => ({
+    meta: [
+      { title: "XP & Levels — Level up your money habits | Spendly" },
+      { name: "description", content: "Earn XP for every expense you log, unlock badges and level up from Chai Tracker to Crorepati Mode with Spendly." },
+      { property: "og:title", content: "XP & Levels — Level up your money habits" },
+      { property: "og:description", content: "Earn XP, unlock badges and level up from Chai Tracker to Crorepati Mode." },
+      { property: "og:url", content: "https://spandly.lovable.app/xp" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/xp" }],
+  }),
 });
 
 const LEVELS = [

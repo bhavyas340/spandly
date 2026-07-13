@@ -254,6 +254,7 @@ function GoalEditor({
               ref={fileRef}
               type="file"
               accept="image/*"
+              aria-label="Goal photo"
               className="hidden"
               onChange={(ev) => handlePick(ev.target.files?.[0])}
             />
@@ -267,6 +268,7 @@ function GoalEditor({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Goa Trip"
+                aria-label="Goal title"
                 className="flex-1 bg-transparent outline-none text-[18px] font-bold text-black placeholder:text-black/30"
               />
               <button
@@ -291,6 +293,7 @@ function GoalEditor({
                 value={target}
                 onChange={(e) => setTarget(e.target.value.replace(/[^\d]/g, ""))}
                 placeholder="25000"
+                aria-label="Target amount in rupees"
                 className="w-full bg-transparent outline-none text-[20px] font-bold text-black placeholder:text-black/30"
                 style={{ fontFamily: "'Courier New', monospace" }}
               />
@@ -302,6 +305,7 @@ function GoalEditor({
                 value={saved}
                 onChange={(e) => setSaved(e.target.value.replace(/[^\d]/g, ""))}
                 placeholder="0"
+                aria-label="Saved amount in rupees"
                 className="w-full bg-transparent outline-none text-[20px] font-bold text-black placeholder:text-black/30"
                 style={{ fontFamily: "'Courier New', monospace" }}
               />

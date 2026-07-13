@@ -6,7 +6,16 @@ import { useLocalState, fileToDataUrl } from "@/lib/storage";
 
 export const Route = createFileRoute("/snap-to-log")({
   component: SnapToLog,
-  head: () => ({ meta: [{ title: "Spendly — Snap to Log" }] }),
+  head: () => ({
+    meta: [
+      { title: "Snap to Log — Turn a receipt photo into an expense | Spendly" },
+      { name: "description", content: "Snap a photo of any bill or receipt and Spendly auto-detects the merchant, category and amount — logged in seconds." },
+      { property: "og:title", content: "Snap to Log — Turn a receipt photo into an expense" },
+      { property: "og:description", content: "Snap a bill, get merchant, category and amount detected automatically." },
+      { property: "og:url", content: "https://spandly.lovable.app/snap-to-log" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/snap-to-log" }],
+  }),
 });
 
 type Expense = { id: number; label: string; category: string; amount: number; emoji: string; createdAt: number; image?: string };

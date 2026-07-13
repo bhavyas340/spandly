@@ -134,7 +134,10 @@ function CoachPage() {
 
         <div className="px-4 pb-6 pt-3">
           <div className="flex items-center gap-2 bg-white rounded-full border border-black/10 shadow-sm px-4 py-2">
+            <label htmlFor="coach-msg" className="sr-only">Message Spandly Bhai</label>
             <input
+              id="coach-msg"
+              aria-label="Message Spandly Bhai"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
@@ -144,6 +147,7 @@ function CoachPage() {
             <button
               onClick={send}
               disabled={!input.trim() || typing}
+              aria-label="Send message"
               className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center disabled:opacity-30"
             >
               <Send size={16} />

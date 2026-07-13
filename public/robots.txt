@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /haptic-lab
-Disallow: /icon-status
 
 Sitemap: https://spandly.lovable.app/sitemap.xml

@@ -5,7 +5,16 @@ import { getExpenses, getMonthExpenses, getStreak, getPersona, type Persona } fr
 
 export const Route = createFileRoute("/spend-dna")({
   component: SpendDna,
-  head: () => ({ meta: [{ title: "Spendly — Spend DNA" }] }),
+  head: () => ({
+    meta: [
+      { title: "Spend DNA — Your monthly money personality | Spendly" },
+      { name: "description", content: "See your Spend DNA — the traits, patterns and persona that shape how you spend each month. Powered by your Spendly history." },
+      { property: "og:title", content: "Spend DNA — Your monthly money personality" },
+      { property: "og:description", content: "The traits, patterns and persona that shape how you spend each month." },
+      { property: "og:url", content: "https://spandly.lovable.app/spend-dna" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/spend-dna" }],
+  }),
 });
 
 type HistoryEntry = { month: number; year: number; persona: Persona };
@@ -160,7 +169,7 @@ export function Shell({ title, children, right }: { title: string; children: Rea
 }
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <div className="text-[11px] uppercase tracking-wider font-semibold text-black/50 mt-2">{children}</div>;
+  return <h2 className="text-[11px] uppercase tracking-wider font-semibold text-black/50 mt-2">{children}</h2>;
 }
 
 export function EmptyCard({ text, cta }: { text: string; cta?: boolean }) {

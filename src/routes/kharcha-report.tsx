@@ -5,7 +5,16 @@ import { getCategoryTotals, getExpenses, getMonthExpenses, getPersona, getStreak
 
 export const Route = createFileRoute("/kharcha-report")({
   component: KharchaReport,
-  head: () => ({ meta: [{ title: "Spendly — Kharcha Report" }] }),
+  head: () => ({
+    meta: [
+      { title: "Kharcha Report — Your monthly spending recap | Spendly" },
+      { name: "description", content: "A one-page monthly kharcha report — top categories, best and worst days, streaks and persona. Made from your Spendly history." },
+      { property: "og:title", content: "Kharcha Report — Your monthly spending recap" },
+      { property: "og:description", content: "Top categories, best and worst days, streaks and persona for the month." },
+      { property: "og:url", content: "https://spandly.lovable.app/kharcha-report" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/kharcha-report" }],
+  }),
 });
 
 const EMOJI: Record<string, string> = { Food: "🍱", Auto: "🛺", Chai: "☕", Shopping: "🛍️", Bills: "💡", Travel: "🛺" };
