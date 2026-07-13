@@ -5,7 +5,16 @@ import { getCategoryTotals, getMonthExpenses } from "@/lib/spandlyStorage";
 
 export const Route = createFileRoute("/city-pulse")({
   component: CityPulse,
-  head: () => ({ meta: [{ title: "Spendly — City Pulse" }] }),
+  head: () => ({
+    meta: [
+      { title: "City Pulse — How your city is spending this week | Spendly" },
+      { name: "description", content: "See real-time spending trends across Mumbai, Delhi, Bengaluru, Pune and more Indian cities — food, auto, chai and bills — with Spendly City Pulse." },
+      { property: "og:title", content: "City Pulse — How your city is spending this week" },
+      { property: "og:description", content: "Weekly spending trends across major Indian cities — food, auto, chai and bills." },
+      { property: "og:url", content: "https://spandly.lovable.app/city-pulse" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/city-pulse" }],
+  }),
 });
 
 const CITIES = ["Mumbai", "Delhi", "Bengaluru", "Pune", "Hyderabad", "Chennai", "Ahmedabad", "Kolkata", "Jaipur", "Surat"];
