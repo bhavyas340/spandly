@@ -6,7 +6,16 @@ import { getMonthExpenses, getStreak, getCategoryTotals } from "@/lib/spandlySto
 
 export const Route = createFileRoute("/whatsapp-share")({
   component: WhatsAppShare,
-  head: () => ({ meta: [{ title: "Spendly — Share on WhatsApp" }] }),
+  head: () => ({
+    meta: [
+      { title: "Share your month on WhatsApp | Spendly" },
+      { name: "description", content: "Turn your monthly Spendly summary into a shareable WhatsApp card — top categories, streak and total — in one tap." },
+      { property: "og:title", content: "Share your month on WhatsApp" },
+      { property: "og:description", content: "Turn your monthly Spendly summary into a shareable WhatsApp card." },
+      { property: "og:url", content: "https://spandly.lovable.app/whatsapp-share" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/whatsapp-share" }],
+  }),
 });
 
 function WhatsAppShare() {
