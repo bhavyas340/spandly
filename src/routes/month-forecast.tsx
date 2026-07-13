@@ -5,7 +5,16 @@ import { getMonthExpenses } from "@/lib/spandlyStorage";
 
 export const Route = createFileRoute("/month-forecast")({
   component: MonthForecast,
-  head: () => ({ meta: [{ title: "Spendly — Month Forecast" }] }),
+  head: () => ({
+    meta: [
+      { title: "Month Forecast — Where you'll land this month | Spendly" },
+      { name: "description", content: "Project your month-end total from your current pace and compare it to your usual monthly spend with Spendly's Month Forecast." },
+      { property: "og:title", content: "Month Forecast — Where you'll land this month" },
+      { property: "og:description", content: "Project your month-end total and compare it to your usual monthly spend." },
+      { property: "og:url", content: "https://spandly.lovable.app/month-forecast" },
+    ],
+    links: [{ rel: "canonical", href: "https://spandly.lovable.app/month-forecast" }],
+  }),
 });
 
 function MonthForecast() {
